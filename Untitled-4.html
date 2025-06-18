@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Canvas Jigsaw Puzzle</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #333; /* Darker background for better contrast */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            flex-direction: column; /* Allow for title/messages */
+        }
+        #puzzle-container {
+            position: relative; /* Needed for overlaying the win message */
+        }
+        #puzzle-canvas {
+            /* **FIX: The border is now drawn by the canvas itself, not CSS** */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canvas Jigsaw Puzzle</h1>
+    <div id="puzzle-container">
+        <canvas id="puzzle-canvas"></canvas>
+    </div>
+    <script>
+        // --- CONFIGURATION & SETUP ---
+
+        const PUZZLE_ROWS = 4; // How many rows
+        const PUZZLE_COLS = 5; // How many columns
+        const IMAGE_SRC = "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=800&q=80";
+
+        const canvas = document.getElementById('puzzle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let puzzleWidth, puzzleHeight;
+        let pieceWidth, pieceHeight;
+        let knobSize;
+        let puzzleOffsetX, puzzleOffsetY; 
+
+        // --- STATE MANAGEMENT ---
+
+        let pieces = []; // This will hold all our Piece objects
+        const sourceImage = new Image();
+        sourceImage.crossOrigin = "Anonymous"; // Allows loading images from other domains
+
+        let draggedPiece = null;
+        let offsetX = 0;
+        let offsetY = 0;
+        let isSolved = false; // Flag to stop updates once solved
+
+        // --- THE PIECE CLASS ---
+        class Piece {
+            constructor(row, col, shape) {
+                this.row = row;
+                this.col = col;
+                this.shape = shape; 
+                this.isLocked = false; 
+
+                this.correctX = puzzleOffsetX + this.col * pieceWidth;
+                this.correctY = puzzleOffsetY + this.row * pieceHeight;
+
+                const pos = this.getScramblePosition();
+                this.x = pos.x;
+                this.y = pos.y;
+            }
+
+            getScramblePosition() {
+                let x, y;
+                const area = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
+
+                // Place piece in one of the four margins around the puzzle board
+                switch (area) {
+                    case 0: // Top margin
+                        x = Math.random() * canvas.width;
+                        y = Math.random() * (puzzleOffsetY - pieceHeight);
+                        break;
+                    case 1: // Right margin
+                        x = (puzzleOffsetX + puzzleWidth) + Math.random() * (puzzleOffsetX - pieceWidth);
+                        y = Math.random() * canvas.height;
+                        break;
+                    case 2: // Bottom margin
+                        x = Math.random() * canvas.width;
+                        y = (puzzleOffsetY + puzzleHeight) + Math.random() * (puzzleOffsetY - pieceHeight);
+                        break;
+                    case 3: // Left margin
+                        x = Math.random() * (puzzleOffsetX - pieceWidth);
+                        y = Math.random() * canvas.height;
+                        break;
+                }
+                // Clamp values to ensure they are fully on canvas
+                return { 
+                    x: Math.max(0, Math.min(x, canvas.width - pieceWidth)),
+                    y: Math.max(0, Math.min(y, canvas.height - pieceHeight))
+                };
+            }
+
+            // Draw the piece onto the canvas
+            draw(context) {
+                context.save();
+
+                this.createPath(context);
+                
+                if (!this.isLocked) {
+                    context.shadowColor = 'rgba(0,0,0,0.5)';
+                    context.shadowBlur = 10;
+                    context.shadowOffsetX = 3;
+                    context.shadowOffsetY = 3;
+                }
+
+                context.fillStyle = '#fff';
+                context.fill();
+                context.clip();
+
+                const sourcePixelPerCanvasPixel = sourceImage.width / puzzleWidth;
+                
+                const sX = this.col * (sourceImage.width / PUZZLE_COLS) - (this.shape.left === 1 ? knobSize * sourcePixelPerCanvasPixel : 0);
+                const sY = this.row * (sourceImage.height / PUZZLE_ROWS) - (this.shape.top === 1 ? knobSize * sourcePixelPerCanvasPixel : 0);
+                const sWidth = (sourceImage.width / PUZZLE_COLS) + ((this.shape.left === 1 ? knobSize : 0) + (this.shape.right === 1 ? knobSize : 0)) * sourcePixelPerCanvasPixel;
+                const sHeight = (sourceImage.height / PUZZLE_ROWS) + ((this.shape.top === 1 ? knobSize : 0) + (this.shape.bottom === 1 ? knobSize : 0)) * sourcePixelPerCanvasPixel;
+
+                const dX = this.x - (this.shape.left === 1 ? knobSize : 0);
+                const dY = this.y - (this.shape.top === 1 ? knobSize : 0);
+                const dWidth = pieceWidth + (this.shape.left === 1 ? knobSize : 0) + (this.shape.right === 1 ? knobSize : 0);
+                const dHeight = pieceHeight + (this.shape.top === 1 ? knobSize : 0) + (this.shape.bottom === 1 ? knobSize : 0);
+
+                context.drawImage(sourceImage, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
+
+                context.strokeStyle = this.isLocked ? 'rgba(0,0,0,0.2)' : '#333';
+                context.lineWidth = this.isLocked ? 1 : 2;
+                context.stroke();
+
+                context.restore();
+            }
+
+            createPath(context) {
+                context.beginPath();
+                
+                const { top, right, bottom, left } = this.shape;
+                const [x, y] = [this.x, this.y];
+                const [pw, ph] = [pieceWidth, pieceHeight];
+                const ks = knobSize;
+                
+                const KNOB_LENGTH_PERCENT = 0.4; 
+                const MARGIN = (1 - KNOB_LENGTH_PERCENT) / 2;
+
+                context.moveTo(x, y);
+
+                if (top !== 0) {
+                    context.lineTo(x + pw * MARGIN, y);
+                    context.bezierCurveTo(
+                        x + pw * MARGIN, y - ks * top,
+                        x + pw * (1 - MARGIN), y - ks * top,
+                        x + pw * (1 - MARGIN), y
+                    );
+                }
+                context.lineTo(x + pw, y);
+
+                if (right !== 0) {
+                    context.lineTo(x + pw, y + ph * MARGIN);
+                    context.bezierCurveTo(
+                        x + pw + ks * right, y + ph * MARGIN,
+                        x + pw + ks * right, y + ph * (1 - MARGIN),
+                        x + pw, y + ph * (1 - MARGIN)
+                    );
+                }
+                context.lineTo(x + pw, y + ph);
+
+                if (bottom !== 0) {
+                    context.lineTo(x + pw * (1 - MARGIN), y + ph);
+                    context.bezierCurveTo(
+                        x + pw * (1 - MARGIN), y + ph + ks * bottom,
+                        x + pw * MARGIN, y + ph + ks * bottom,
+                        x + pw * MARGIN, y + ph
+                    );
+                }
+                context.lineTo(x, y + ph);
+
+                if (left !== 0) {
+                    context.lineTo(x, y + ph * (1 - MARGIN));
+                    context.bezierCurveTo(
+                        x - ks * left, y + ph * (1 - MARGIN),
+                        x - ks * left, y + ph * MARGIN,
+                        x, y + ph * MARGIN
+                    );
+                }
+                context.lineTo(x, y);
+
+                context.closePath();
+            }
+            
+            isPointInside(x, y) {
+                this.createPath(ctx);
+                return ctx.isPointInPath(x, y);
+            }
+        }
+
+        // --- INITIALIZATION and MAIN LOGIC ---
+
+        function init() {
+            sourceImage.onload = () => {
+                const imageAspectRatio = sourceImage.width / sourceImage.height;
+                const availableWidth = window.innerWidth * 0.9;
+                const availableHeight = window.innerHeight * 0.8; 
+
+                if (availableWidth / imageAspectRatio > availableHeight) {
+                    puzzleHeight = availableHeight;
+                    puzzleWidth = puzzleHeight * imageAspectRatio;
+                } else {
+                    puzzleWidth = availableWidth;
+                    puzzleHeight = puzzleWidth / imageAspectRatio;
+                }
+                
+                canvas.width = puzzleWidth * 1.5;
+                canvas.height = puzzleHeight * 1.5;
+
+                puzzleOffsetX = (canvas.width - puzzleWidth) / 2;
+                puzzleOffsetY = (canvas.height - puzzleHeight) / 2;
+
+                pieceWidth = puzzleWidth / PUZZLE_COLS;
+                pieceHeight = puzzleHeight / PUZZLE_ROWS;
+                // **FIX: Increased knob size from 20% to 30% for a more pronounced effect**
+                knobSize = Math.min(pieceWidth, pieceHeight) * 0.3;
+
+                generatePieces();
+                addEventListeners();
+                
+                requestAnimationFrame(gameLoop);
+            };
+            sourceImage.src = IMAGE_SRC;
+        }
+
+        function generatePieces() {
+            pieces = [];
+            const shapes = Array(PUZZLE_ROWS).fill(null).map(() => Array(PUZZLE_COLS).fill(null));
+
+            for (let r = 0; r < PUZZLE_ROWS; r++) {
+                for (let c = 0; c < PUZZLE_COLS; c++) {
+                    const shape = {};
+                    
+                    shape.top = (r > 0) ? -shapes[r - 1][c].bottom : 0;
+                    shape.right = (c < PUZZLE_COLS - 1) ? (Math.random() > 0.5 ? 1 : -1) : 0;
+                    shape.bottom = (r < PUZZLE_ROWS - 1) ? (Math.random() > 0.5 ? 1 : -1) : 0;
+                    shape.left = (c > 0) ? -shapes[r][c - 1].right : 0;
+                    
+                    shapes[r][c] = shape;
+                    pieces.push(new Piece(r, c, shape));
+                }
+            }
+        }
+        
+        // --- EVENT HANDLING ---
+
+        function addEventListeners() {
+            canvas.addEventListener('mousedown', onMouseDown);
+            canvas.addEventListener('mousemove', onMouseMove);
+            canvas.addEventListener('mouseup', onMouseUp);
+            canvas.addEventListener('touchstart', onMouseDown, { passive: false });
+            canvas.addEventListener('touchmove', onMouseMove, { passive: false });
+            canvas.addEventListener('touchend', onMouseUp);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches ? e.touches[0] : null;
+            return {
+                x: (touch ? touch.clientX : e.clientX) - rect.left,
+                y: (touch ? touch.clientY : e.clientY) - rect.top,
+            };
+        }
+
+        function onMouseDown(e) {
+            if (isSolved) return;
+            e.preventDefault();
+            const pos = getMousePos(e);
+
+            for (let i = pieces.length - 1; i >= 0; i--) {
+                if (!pieces[i].isLocked && pieces[i].isPointInside(pos.x, pos.y)) {
+                    draggedPiece = pieces[i];
+                    pieces.push(pieces.splice(i, 1)[0]);
+                    offsetX = pos.x - draggedPiece.x;
+                    offsetY = pos.y - draggedPiece.y;
+                    break;
+                }
+            }
+        }
+
+        function onMouseMove(e) {
+            if (draggedPiece) {
+                e.preventDefault();
+                const pos = getMousePos(e);
+                draggedPiece.x = pos.x - offsetX;
+                draggedPiece.y = pos.y - offsetY;
+            }
+        }
+
+        function onMouseUp() {
+            if (draggedPiece) {
+                const snapDistance = pieceWidth * 0.25;
+                if (Math.abs(draggedPiece.x - draggedPiece.correctX) < snapDistance &&
+                    Math.abs(draggedPiece.y - draggedPiece.correctY) < snapDistance) {
+                    
+                    draggedPiece.x = draggedPiece.correctX;
+                    draggedPiece.y = draggedPiece.correctY;
+                    draggedPiece.isLocked = true;
+                    
+                    const index = draggedPiece.row * PUZZLE_COLS + draggedPiece.col;
+                    const lastPiece = pieces.pop();
+                    pieces.splice(index, 0, lastPiece);
+
+                    checkWinCondition();
+                }
+                draggedPiece = null;
+            }
+        }
+        
+        // --- WIN CONDITION LOGIC ---
+
+        function drawFinalState() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const piece of pieces) {
+                piece.draw(ctx);
+            }
+        }
+
+        function checkWinCondition() {
+            const allLocked = pieces.every(p => p.isLocked);
+            if (allLocked) {
+                isSolved = true;
+                drawFinalState(); 
+                onPuzzleSolved();
+            }
+        }
+
+        function onPuzzleSolved() {
+            console.log("Congratulations, you solved the puzzle!");
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = `bold ${puzzleWidth / 10}px sans-serif`;
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('You Win!', canvas.width / 2, canvas.height / 2);
+        }
+
+        // --- THE GAME LOOP ---
+
+        function gameLoop() {
+            if (isSolved) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
+            
+            ctx.globalAlpha = 0.2;
+            ctx.drawImage(sourceImage, puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
+            ctx.restore();
+
+            for (const piece of pieces) {
+                piece.draw(ctx);
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- START THE PUZZLE ---
+        init();
+    </script>
+</body>
+</html>
