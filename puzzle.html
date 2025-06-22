@@ -5,39 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Canvas Jigsaw Puzzle</title>
     <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             overflow: hidden;
-            background-color: #333; /* Darker background for better contrast */
+            /* **FIX: Set background to black for a seamless look with the canvas** */
+            background-color: #000; 
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             color: white;
-            flex-direction: column; /* Allow for title/messages */
+            flex-direction: column; 
         }
         #puzzle-container {
-            position: relative; /* Needed for overlaying the win message */
+            position: relative; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
         }
         #puzzle-canvas {
-            /* **FIX: The border is now drawn by the canvas itself, not CSS** */
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             background-color: #000;
         }
     </style>
 </head>
 <body>
-    <h1>Canvas Jigsaw Puzzle</h1>
+    <h1>Tolong Persatukan kami!</h1>
     <div id="puzzle-container">
         <canvas id="puzzle-canvas"></canvas>
     </div>
     <script>
         // --- CONFIGURATION & SETUP ---
 
-        const PUZZLE_ROWS = 4; // How many rows
-        const PUZZLE_COLS = 5; // How many columns
+        const PUZZLE_ROWS = 2; // How many rows
+        const PUZZLE_COLS = 2; // How many columns
         const IMAGE_SRC = "https://images.unsplash.com/photo-1561948955-570b270e7c36?w=800&q=80";
+        // **FIX: Define a scale for the puzzle board relative to the canvas size**
+        const PUZZLE_BOARD_SCALE = 0.65; // Puzzle board will take up 65% of the canvas dimension
 
         const canvas = document.getElementById('puzzle-canvas');
         const ctx = canvas.getContext('2d');
@@ -135,8 +146,8 @@
 
                 context.drawImage(sourceImage, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
 
-                context.strokeStyle = this.isLocked ? 'rgba(0,0,0,0.2)' : '#333';
-                context.lineWidth = this.isLocked ? 1 : 2;
+                context.strokeStyle = this.isLocked ? 'rgba(0,0,0,0.2)' : '#ffffff';
+                context.lineWidth = this.isLocked ? 1 : 4;
                 context.stroke();
 
                 context.restore();
@@ -208,27 +219,32 @@
 
         function init() {
             sourceImage.onload = () => {
+                // **FIX: Major logic change for responsive scaling**
+                // 1. Set canvas to fill the available window space
+                const availableWidth = window.innerWidth;
+                const availableHeight = window.innerHeight;
+                canvas.width = availableWidth;
+                canvas.height = availableHeight;
+                
+                // 2. Calculate the puzzle board size based on a scale factor
                 const imageAspectRatio = sourceImage.width / sourceImage.height;
-                const availableWidth = window.innerWidth * 0.9;
-                const availableHeight = window.innerHeight * 0.8; 
+                let maxBoardWidth = canvas.width * PUZZLE_BOARD_SCALE;
+                let maxBoardHeight = canvas.height * PUZZLE_BOARD_SCALE;
 
-                if (availableWidth / imageAspectRatio > availableHeight) {
-                    puzzleHeight = availableHeight;
+                if (maxBoardWidth / imageAspectRatio > maxBoardHeight) {
+                    puzzleHeight = maxBoardHeight;
                     puzzleWidth = puzzleHeight * imageAspectRatio;
                 } else {
-                    puzzleWidth = availableWidth;
+                    puzzleWidth = maxBoardWidth;
                     puzzleHeight = puzzleWidth / imageAspectRatio;
                 }
-                
-                canvas.width = puzzleWidth * 1.5;
-                canvas.height = puzzleHeight * 1.5;
 
+                // 3. Center the puzzle board on the now larger canvas
                 puzzleOffsetX = (canvas.width - puzzleWidth) / 2;
                 puzzleOffsetY = (canvas.height - puzzleHeight) / 2;
 
                 pieceWidth = puzzleWidth / PUZZLE_COLS;
                 pieceHeight = puzzleHeight / PUZZLE_ROWS;
-                // **FIX: Increased knob size from 20% to 30% for a more pronounced effect**
                 knobSize = Math.min(pieceWidth, pieceHeight) * 0.3;
 
                 generatePieces();
@@ -267,6 +283,8 @@
             canvas.addEventListener('touchstart', onMouseDown, { passive: false });
             canvas.addEventListener('touchmove', onMouseMove, { passive: false });
             canvas.addEventListener('touchend', onMouseUp);
+            // **FIX: Add resize listener for responsiveness**
+            window.addEventListener('resize', init);
         }
 
         function getMousePos(e) {
@@ -330,6 +348,10 @@
             for (const piece of pieces) {
                 piece.draw(ctx);
             }
+            // Also draw the board border on the final state
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
         }
 
         function checkWinCondition() {
@@ -350,7 +372,7 @@
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('You Win!', canvas.width / 2, canvas.height / 2);
+            ctx.fillText('Terimakasih telah mempersatukan kami!', canvas.width / 2, canvas.height / 2);
         }
 
         // --- THE GAME LOOP ---
