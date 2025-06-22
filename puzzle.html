@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Canvas Jigsaw Puzzle</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         html, body {
             width: 100%;
@@ -15,12 +16,7 @@
             overflow: hidden;
             /* **FIX: Set background to black for a seamless look with the canvas** */
             background-color: #000; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             color: white;
-            flex-direction: column; 
         }
         #puzzle-container {
             position: relative; 
@@ -34,10 +30,14 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             background-color: #000;
         }
+
+        /* Custom animation for SweetAlert2 */
+        .swal-show-slow {
+            animation: swal2-show 1.5s;
+        }
     </style>
 </head>
 <body>
-    <h1>Tolong Persatukan kami!</h1>
     <div id="puzzle-container">
         <canvas id="puzzle-canvas"></canvas>
     </div>
@@ -168,41 +168,33 @@
 
                 if (top !== 0) {
                     context.lineTo(x + pw * MARGIN, y);
-                    context.bezierCurveTo(
-                        x + pw * MARGIN, y - ks * top,
-                        x + pw * (1 - MARGIN), y - ks * top,
-                        x + pw * (1 - MARGIN), y
-                    );
+                    context.lineTo(x + pw * MARGIN, y - ks * top);
+                    context.lineTo(x + pw * (1 - MARGIN), y - ks * top);
+                    context.lineTo(x + pw * (1 - MARGIN), y);
                 }
                 context.lineTo(x + pw, y);
 
                 if (right !== 0) {
                     context.lineTo(x + pw, y + ph * MARGIN);
-                    context.bezierCurveTo(
-                        x + pw + ks * right, y + ph * MARGIN,
-                        x + pw + ks * right, y + ph * (1 - MARGIN),
-                        x + pw, y + ph * (1 - MARGIN)
-                    );
+                    context.lineTo(x + pw + ks * right, y + ph * MARGIN);
+                    context.lineTo(x + pw + ks * right, y + ph * (1 - MARGIN));
+                    context.lineTo(x + pw, y + ph * (1 - MARGIN));
                 }
                 context.lineTo(x + pw, y + ph);
 
                 if (bottom !== 0) {
                     context.lineTo(x + pw * (1 - MARGIN), y + ph);
-                    context.bezierCurveTo(
-                        x + pw * (1 - MARGIN), y + ph + ks * bottom,
-                        x + pw * MARGIN, y + ph + ks * bottom,
-                        x + pw * MARGIN, y + ph
-                    );
+                    context.lineTo(x + pw * (1 - MARGIN), y + ph + ks * bottom);
+                    context.lineTo(x + pw * MARGIN, y + ph + ks * bottom);
+                    context.lineTo(x + pw * MARGIN, y + ph);
                 }
                 context.lineTo(x, y + ph);
 
                 if (left !== 0) {
                     context.lineTo(x, y + ph * (1 - MARGIN));
-                    context.bezierCurveTo(
-                        x - ks * left, y + ph * (1 - MARGIN),
-                        x - ks * left, y + ph * MARGIN,
-                        x, y + ph * MARGIN
-                    );
+                    context.lineTo(x - ks * left, y + ph * (1 - MARGIN));
+                    context.lineTo(x - ks * left, y + ph * MARGIN);
+                    context.lineTo(x, y + ph * MARGIN);
                 }
                 context.lineTo(x, y);
 
@@ -364,15 +356,53 @@
         }
 
         function onPuzzleSolved() {
-            console.log("Congratulations, you solved the puzzle!");
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            let finalOpacity = 0;
+            const animationDuration = 2000; // 2 seconds for image fade
+            let startTime = null;
 
-            ctx.font = `bold ${puzzleWidth / 10}px sans-serif`;
-            ctx.fillStyle = 'white';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('Terimakasih telah mempersatukan kami!', canvas.width / 2, canvas.height / 2);
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const animationProgress = Math.min(progress / animationDuration, 1);
+
+                // --- Background Color Animation ---
+                // Animate from black (0,0,0) to magenta (255,0,255)
+                const red = Math.floor(255 * animationProgress);
+                const blue = Math.floor(255 * animationProgress);
+                document.body.style.backgroundColor = `rgb(${red}, 0, ${blue})`;
+                canvas.style.backgroundColor = `rgb(${red}, 0, ${blue})`;
+
+                // --- Image Fade-in Animation ---
+                drawFinalState();
+                ctx.save();
+                ctx.globalAlpha = animationProgress;
+                ctx.drawImage(sourceImage, puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
+                ctx.restore();
+                
+                if (animationProgress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Animation finished, show the alert
+                    setTimeout(() => {
+                        Swal.fire({
+                            title: 'Terimakasih telah menyatukan kami',
+                            confirmButtonText: 'Lanjutkan ke Digiland',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showClass: { // Use the custom slow animation
+                                popup: 'swal-show-slow'
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Reset background before navigating
+                                // document.body.style.backgroundColor = '#000';
+                                window.location.href = 'https://www.instagram.com/gibransansa/'; 
+                            }
+                        });
+                    }, 500);
+                }
+            }
+            requestAnimationFrame(animate);
         }
 
         // --- THE GAME LOOP ---
@@ -399,7 +429,17 @@
         }
 
         // --- START THE PUZZLE ---
-        init();
+        Swal.fire({
+            title: 'Tolong Persatukan kami!',
+            text: 'Satukan kembali kepingan-kepingan puzzle ini.',
+            confirmButtonText: 'Mulai',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                init();
+            }
+        });
     </script>
 </body>
 </html>
