@@ -819,6 +819,40 @@
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
+
+      
+
+        .date {
+            background: none;
+            color: #222;
+            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-size: 2.2rem;
+            text-align: left;
+            margin: auto auto 0.5em auto;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.3em;
+        }
+
+        .date-day {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-right: 0.2em;
+        }
+
+        .date-main {
+            font-weight: bold;
+            font-size: 2.2rem;
+            margin-right: 0.2em;
+        }
+
+        .date-year {
+            font-size: 1.1rem;
+            font-style: normal;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
@@ -908,11 +942,18 @@
 
             <!-- Event Details & Timeline -->
             <section id="details" class="container reveal parallax-el" data-parallax-speed="0.6">
-                <div>put element here <br><br><br><br><br></div>
-                <p class="preambule ">Kami mengundang <b>Your Name Here</b> untuk hadir dalam acara pernikahan kami pada:</p>
-                <p class="date">Minggu, 07 September 2025</p>
-                <h2>Gedung Serbaguna Universitas Lambung Mangkurat</h2>
-                <p>Banjarbaru, Kalimantan Selatan</p>
+                <div><br><br><br> put element here <br><br></div>
+                <p class="preambule">Kami mengundang <b>Your Name Here</b> untuk hadir dalam acara pernikahan kami pada:</p>
+                <div class="date">
+                    <div class="centered-date">
+                        <span class="date-day">Minggu</span>
+                        <span class="date-main">07 September</span>
+                        <span class="date-year">2025</span>
+                    </div>
+                    
+                </div>
+                <h1 id="gedung">Gedung Serbaguna Universitas Lambung Mangkurat</h1>
+                <p id="kota-resepsi">Banjarbaru, Kalimantan Selatan</p>
                 <div class="action-buttons" >
                     <a href="#" target="_blank" class="cta-button action-button" id="add-to-calendar-btn">Add to Calendar</a>
                     <a href="#" target="_blank" class="cta-button action-button" id="google-maps-btn">Google Maps</a>
@@ -921,7 +962,7 @@
                     <div class="timeline-item right reveal"><div class="timeline-content"><h3>Reception</h3><p>7:00 PM</p></div></div>
                     <div class="timeline-item left reveal"><div class="timeline-content"><h3>Home Time</h3><p>9:00 PM</p></div></div>
                 </div>
-                <p class="timeline-note reveal" data-parallax-speed="-0.1">Your early arrival at 6.30 pm is greatly appreciated as we embark on this beautiful journey together. Akad is reserved for family only.</p>
+                <p class="timeline-note reveal" data-parallax-speed="-0.1">kedatanganmu akan sangat berarti dalam awalan perjalanan kami</p>
                 <div><br><br><br><br><br>put element here </div>
             
             </section>
