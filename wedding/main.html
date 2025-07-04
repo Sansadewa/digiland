@@ -16,6 +16,12 @@
     <!-- Tailwind CSS for the success modal -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Preload the hero video -->
+    <link rel="preload" as="video" href="video.m4v" type="video/mp4">
+
+    <!-- Preload a key image (if needed) -->
+    <link rel="preload" as="image" href="img1.jpg" imagesrcset="img1.jpg">
+
     <style>
         /* CSS Variables for easy theming */
         :root {
@@ -880,7 +886,7 @@
     </div>
 
     <!-- Audio Player -->
-    <audio id="background-music" loop>
+    <audio id="background-music" class="preload-asset" loop>
         <source src="salpriadi.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -890,7 +896,7 @@
         <!-- Hero Section -->
         <section id="hero" class="hero">
             <video class="hero-video" autoplay loop muted playsinline>
-                <source src="video.m4v" type="video/mp4">
+                <source src="video.m4v" type="video/mp4" class="preload-asset">
             </video>
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -917,7 +923,7 @@
                 <div class="couple-profile reveal bride-profile">
                     <div class="couple-profile-border"></div>
                     <div class="couple-photo-container">
-                        <img src="img1.jpg" alt="The Bride - Diyang" onerror="this.onerror=null;this.src='https://placehold.co/800x1200/E6D3B3/333333?text=Diyang';">
+                        <img class="preload-asset" src="img1.jpg" alt="The Bride - Diyang" onerror="this.onerror=null;this.src='https://placehold.co/800x1200/E6D3B3/333333?text=Diyang';">
                     </div>
                     <div class="couple-info">
                         <h2>Diyang Gita Cendekia</h2>
@@ -933,7 +939,7 @@
                 <div class="couple-profile reveal groom-profile">
                     <div class="couple-profile-border"></div>
                     <div class="couple-photo-container">
-                        <img src="img2.jpg" alt="The Groom - Gibran" onerror="this.onerror=null;this.src='https://placehold.co/800x1200/C0C0C0/333333?text=Gibran';">
+                        <img class="preload-asset" src="img2.jpg" alt="The Groom - Gibran" onerror="this.onerror=null;this.src='https://placehold.co/800x1200/C0C0C0/333333?text=Gibran';">
                     </div>
                     <div class="couple-info">
                         <h2>Gibran Sansadewa Asshadiqi</h2>
@@ -1021,7 +1027,7 @@
                     <h2>See You<br>There</h2>
                     <p class="outro-thankyou">Thank you for your wishes and prayers.</p>
                 </div>
-                <img src="img3.png" alt="Couple final photo" class="outro-bg-image">
+                <img class="preload-asset" src="img3.png" alt="Couple final photo" class="outro-bg-image">
                 <div class="outro-bg-overlay"></div>
             </section>
             
@@ -1072,14 +1078,47 @@
         const googleMapsBtn = document.getElementById('google-maps-btn');
         const backgroundMusic = document.getElementById('background-music');
         const audioControlBtn = document.getElementById('audio-control-btn');
-        
+        // const heroVideo = document.getElementById('hero-video');
         // --- Loading Logic ---
-        window.onload = () => {
+        // window.onload = () => {
+        //     loader.style.opacity = '0';
+        //     setTimeout(() => {
+        //         loader.style.display = 'none';
+        //     }, 500);
+        // };
+
+        // --- Preload Assets ---
+        const assets = document.querySelectorAll('.preload-asset');
+        const assetPromises = Array.from(assets).map(asset => {
+            if (asset.tagName === 'IMG') {
+                return new Promise(resolve => {
+                    if (asset.complete) resolve();
+                    else asset.addEventListener('load', resolve, { once: true });
+                });
+            }
+            if (asset.tagName === 'VIDEO') {
+                return new Promise(resolve => {
+                    if (asset.readyState >= 2) resolve();
+                    else asset.addEventListener('loadeddata', resolve, { once: true });
+                });
+            }
+            if (asset.tagName === 'AUDIO') {
+                return new Promise(resolve => {
+                    if (asset.readyState >= 3) resolve(); // HAVE_FUTURE_DATA
+                    else asset.addEventListener('canplaythrough', resolve, { once: true });
+                });
+            }
+            // Add more asset types if needed
+            return Promise.resolve();
+        });
+
+        Promise.all(assetPromises).then(() => {
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
             }, 500);
-        };
+        });
+        
 
         // --- Set Calendar and Map button ---
         function setupActionLinks() {
@@ -1328,6 +1367,8 @@
 
         // --- Initialize Action Links ---
         setupActionLinks();
+
+        
     });
     </script>
 </body>
