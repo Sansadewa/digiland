@@ -8,6 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="img3.png" imagesrcset="img3.png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <!-- Font Awesome for Icons -->
@@ -36,7 +37,8 @@
             --text-light: #FDFDFD; /* A clean, bright white for text on dark backgrounds. */
             --primary-accent: #E8B4BC; /* A dusty rose for a romantic and cheerful primary highlight. */
             --secondary-accent: #D9A404; /* A warm, celebratory gold for special touches like icons and highlights. */
-            
+            --tertiary-accent: #704300;   /* A warm, celebratory gold for special touches like icons and highlights. */
+
             /* Component & Section Specific Colors */
             --gradient-bg: linear-gradient(135deg, #FFFCF7 0%, #F8EAE3 100%); /* A subtle gradient from soft white to a hint of blush. */
             --border-color-light: #E0E0E0;
@@ -124,7 +126,7 @@
         }
     
         body {
-            font-family: var(--font-sans);
+            font-family: var(--font-serif);
             background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.6;
@@ -335,7 +337,7 @@
             transform: scale(1.05);
         }
         #intro{
-            height:60vh;
+            /* height:60vh; */
         }
         .divider { width: 100px; height: 1px; background-color: var(--border-color-light); margin: 40px auto; }
         .intro-quote {
@@ -376,14 +378,12 @@
         }
         .couple-profile-border {
             position: absolute;
-            top: 30%;
-            left: 15%;
-            width: 70%;
-            height: 40%;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            border-radius: 40px;
-            box-shadow: 0 0 0 8px var(--bg-light);
-            z-index: 1;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            box-shadow: 0 0 0 8px var(--tertiary-accent);
+            z-index: 10;
             transition: opacity 0.8s ease;
         }
         .couple-photo-container {
@@ -410,7 +410,7 @@
             bottom: 0;
             left: 0;
             width: 100vw;
-            padding: 40px 20px 20px;
+            padding: 40px 20px 60px;
             color: var(--text-light);
             text-align: center;
             background: var(--couple-info-gradient);
@@ -438,6 +438,22 @@
         .instagram-link i { margin-right: 8px; }
     
         /* --- Event Details Section --- */
+        .topframe-svg {
+            color: var(--tertiary-accent); /* or any color you want */
+            height: 80px;
+            width: auto;
+            margin: 10px auto 20px;
+            display: block;
+        }
+
+        .event-separator-svg {
+            color: var(--tertiary-accent); /* or any color you want */
+            height: 32px;
+            padding: 0 10px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
         .event-details h2 { font-size: var(--font-size-timeline-h2); letter-spacing: 2px; line-height: 1.2; }
         .event-details .date, .event-details .location { font-size: var(--font-size-timeline-content-p); margin: 10px 0 20px 0; }
         
@@ -615,6 +631,14 @@
             font-size: var(--font-size-outro-thankyou);
             margin-top: 1rem;
         }
+        .outro-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
     
         footer { padding: 40px 0; text-align: center; font-size: 0.8rem; color: var(--text-color-subtle-light); }
         
@@ -662,19 +686,19 @@
         }
         .gallery-scroller {
             height: 80vh;
-            animation: marquee 90s linear infinite; /* Faster animation */
-            column-width: 220px; /* Reduced column width for smaller photos */
+            column-width: 420px; /* Reduced column width for smaller photos */
             column-gap: 20px;
+            transition: transform linear, opacity 0.5s;
+            opacity: 1;
         }
-        @keyframes marquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
+        .gallery-scroller.fade-out {
+            opacity: 0;
         }
         .gallery-item {
             display: inline-block;
             width: 100%;
             margin-bottom: 20px;
-            border-radius: 12px;
+            border-radius: 4px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
             break-inside: avoid;
@@ -685,10 +709,10 @@
             object-fit: cover;
             cursor: pointer;
             transition: transform 0.3s ease;
-            border-radius: 12px;
+            border-radius: 3px;
         }
-        .gallery-item img:hover {
-            transform: scale(1.05);
+        .gallery-item:hover {
+            transform: scale(1.15);
         }
         
         /* --- Lightbox Modal for Gallery --- */
@@ -752,7 +776,7 @@
                 display: none;
             }
             .gallery-scroller {
-                column-width: 180px;
+                column-width: 270px;
             }
         }
     
@@ -761,7 +785,7 @@
             letter-spacing: 2px;
         }
         .heart {
-            color: var(--secondary-accent);
+            color: red;
             font-size: 1.2em;
             vertical-align: middle;
             animation: heartBeat 1.5s infinite;
@@ -800,29 +824,41 @@
             margin: 30px 0;
             width: 100%;
             position: relative;
+            padding: 10px;
         }
-        .couple-separator-line {
-            flex: 1;
-            height: 3px;
-            background: linear-gradient(to right, transparent, var(--primary-accent), transparent);
-            margin: 0 18px;
-            border-radius: 2px;
-            opacity: 0.7;
-            transform: scaleX(0);
-            transform-origin: center;
-            animation: separatorLineGrow 1.2s cubic-bezier(0.77,0,0.18,1) forwards;
+        
+        .couple-separator-svg path {
+            stroke: var(--tertiary-accent);
+            stroke-width: 1;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 2s ease-in-out forwards;
         }
+        .couple-separator-svg.flipped path {
+            animation-delay: 0.5s;
+        }
+        @keyframes drawPath {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        .couple-separator-svg.visible path {
+            fill: var(--tertiary-accent);
+            transition: fill 0.5s ease 1.5s;
+        }
+
         .couple-separator-text {
-            font-size: 2rem;
+            font-size: 1.7rem;
             font-family: var(--font-serif);
             font-weight: 700;
-            color: var(--text-dark);
+            color: var(--tertiary-accent);
             letter-spacing: 2px;
             text-align: center;
             position: relative;
             z-index: 1;
             padding: 0 18px;
-            margin-top: 10px;
+            margin-bottom: 6px;
         }
         @keyframes separatorLineGrow {
             from { transform: scaleX(0); }
@@ -932,9 +968,17 @@
                     </div>
                 </div>
                 <div class="couple-separator">
-                    <div class="couple-separator-line"></div>
+                    <svg class="couple-separator-svg" viewBox="0 0 183.94 12.95" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path fill="currentColor" d="m183.94,6.48s-2.75-2.21-4.79-1.86c.93-1.23.96-2.56,0-4.62-1.6,3.36-6.66,5.18-9.58,5.98h-3.77c-.34-.86-1.54-1.49-2.97-1.49s-2.62.64-2.97,1.49h-61.09c-3.51,0-5.79-2.42-6.8-4.6-1.01,2.19-3.3,4.6-6.8,4.6H24.08c-.34-.86-1.54-1.49-2.97-1.49s-2.62.64-2.97,1.49h-3.77c-2.92-.8-7.99-2.62-9.58-5.98-.96,2.06-.93,3.39,0,4.62-2.04-.35-4.79,1.86-4.79,1.86,0,0,2.75,2.21,4.79,1.86-.93,1.23-.96,2.56,0,4.62,1.6-3.36,6.66-5.18,9.58-5.98h3.77c.34.86,1.54,1.5,2.97,1.5s2.62-.64,2.97-1.5h61.09c3.1,0,5.79,2.42,6.8,4.6,1.01-2.19,3.7-4.6,6.8-4.6h61.09c.34.86,1.54,1.5,2.97,1.5s2.62-.64,2.97-1.5h3.77c2.92.8,7.99,2.62,9.58,5.98.96-2.06.93-3.39,0-4.62,2.04.35,4.79-1.86,4.79-1.86Z"/>
+                        </g>
+                    </svg>
                     <span class="couple-separator-text">DENGAN</span>
-                    <div class="couple-separator-line"></div>
+                    <svg class="couple-separator-svg" viewBox="0 0 183.94 12.95" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path fill="currentColor" d="m183.94,6.48s-2.75-2.21-4.79-1.86c.93-1.23.96-2.56,0-4.62-1.6,3.36-6.66,5.18-9.58,5.98h-3.77c-.34-.86-1.54-1.49-2.97-1.49s-2.62.64-2.97,1.49h-61.09c-3.51,0-5.79-2.42-6.8-4.6-1.01,2.19-3.3,4.6-6.8,4.6H24.08c-.34-.86-1.54-1.49-2.97-1.49s-2.62.64-2.97,1.49h-3.77c-2.92-.8-7.99-2.62-9.58-5.98-.96,2.06-.93,3.39,0,4.62-2.04-.35-4.79,1.86-4.79,1.86,0,0,2.75,2.21,4.79,1.86-.93,1.23-.96,2.56,0,4.62,1.6-3.36,6.66-5.18,9.58-5.98h3.77c.34.86,1.54,1.5,2.97,1.5s2.62-.64,2.97-1.5h61.09c3.1,0,5.79,2.42,6.8,4.6,1.01-2.19,3.7-4.6,6.8-4.6h61.09c.34.86,1.54,1.5,2.97,1.5s2.62-.64,2.97-1.5h3.77c2.92.8,7.99,2.62,9.58,5.98.96-2.06.93-3.39,0-4.62,2.04.35,4.79-1.86,4.79-1.86Z"/>
+                        </g>
+                    </svg>
                 </div>
                 <div class="couple-profile reveal groom-profile">
                     <div class="couple-profile-border"></div>
@@ -950,8 +994,14 @@
             </section>
 
             <!-- Event Details & Timeline -->
-            <section id="details" class="container reveal parallax-el" data-parallax-speed="0.6">
-                <div><br><br><br> put element here <br><br></div>
+            <section id="details" class="container reveal ">
+                <div>
+                    <svg class="topframe-svg" viewBox="0 0 161.97 30.95" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                        <path fill="currentColor" d="m81.99,13.82c0,.38-.45.69-1,.69s-1-.31-1-.69.45-.69,1-.69,1,.31,1,.69Zm-1,9.56c-.23,1.26-.86,2.25-1.65,2.62.8.37,1.42,1.35,1.65,2.62.23-1.26.86-2.25,1.65-2.62-.8-.37-1.42-1.35-1.65-2.62Zm4.63-19.96c-1.47-.69-2.43-.66-3.3,0,.25-1.46-1.33-3.43-1.33-3.43,0,0-1.58,1.97-1.33,3.43-.88-.66-1.83-.69-3.3,0,3.45,1.64,4.63,8.38,4.63,8.38,0,0,1.19-6.75,4.63-8.38Zm2.44,8.2c1.7-.05,3.36-1.85,3.43-3.71-9.15,1.15-9.99,10.68-9.96,14.89,1.78-8.81,11.39-10.47,6.53-11.18Zm-8.34,12.48h0c-.14-.2-2.67-3.77-7.63-6.65-6.32-4.31-12.63-3.63-15.16-7.16-.57,1.44-.04,3.9,1.89,4.45-1.1.26-2.15.64-3.11,1.17-2.35,1.29-3.94,3.2-4.6,5.53-.54,1.89-.26,3.9.79,5.64,1.13,1.89,3,3.24,5.16,3.72.46.1.92.15,1.38.15,2.91,0,5.54-2.02,6.2-4.97.08-.38.12-.75.12-1.13h0c0-2.67-1.21-5.27-4.56-5.48-3.36-.21-5.38,2.5-4.28,5.07.72-.89,1.06-2.33,1.3-2.64.65,2.75,1.4-2.44,4.88-.49.46.32.85.73,1.16,1.22.62.98.83,2.14.57,3.27-.66,2.97-3.62,4.86-6.59,4.19-1.93-.43-3.62-1.64-4.63-3.34-.93-1.55-1.17-3.33-.7-5,.6-2.11,2.05-3.85,4.21-5.03,2.87-1.57,6.6-1.9,9.99-.89.12.04.24.08.36.12-2.49.1-3.5,3.58-.6,5.32-.31-.82.53-4.36,3.6-4.15,3.07.21,10.21,7.02,10.25,7.07Zm-38.53-1.15c-3.17.22-4.03-3.44-3.72-4.29-3,1.8-1.95,5.39.62,5.49-.13.04-.25.09-.38.13-3.5,1.05-7.35.71-10.31-.91-2.22-1.22-3.72-3.01-4.34-5.19-.49-1.72-.23-3.56.72-5.16,1.04-1.75,2.78-3,4.78-3.44,3.07-.68,6.12,1.26,6.8,4.33.26,1.17.05,2.36-.59,3.37-.32.5-.73.93-1.2,1.26-3.59,2.01-4.37-3.34-5.04-.51-.25-.32-.6-1.8-1.34-2.72-1.13,2.65.95,5.44,4.42,5.23,3.46-.21,4.71-2.9,4.71-5.66h0c0-.38-.04-.77-.12-1.16-.68-3.05-3.39-5.13-6.39-5.13-.47,0-.94.05-1.42.16-2.22.49-4.16,1.89-5.32,3.84-1.08,1.8-1.36,3.87-.81,5.83.68,2.4,2.32,4.37,4.75,5.7.99.54,2.08.93,3.21,1.2-1.99.56-2.54,3.1-1.95,4.59,2.62-3.64,9.12-2.93,15.65-7.38,5.12-2.97,7.73-6.66,7.87-6.87h0c-.04.06-7.41,7.08-10.57,7.3Zm19.46-14.33c.96,1.97,3.24,1.91,3.24,1.91-2.65,2.25,5.21.7,7.99,4.44-3.88-5.44-6.2-6.24-11.24-6.35ZM0,13.77c1.68,1.4,3.74.4,3.74.4-1.49,3.14,5.03-1.51,9.11.75-5.78-3.35-8.22-3.13-12.85-1.16Zm80.44,9.02c.03-4.21-.81-13.74-9.96-14.89.07,1.86,1.72,3.66,3.43,3.71-4.86.7,4.75,2.36,6.53,11.18Zm-73.6.69c1.22,3.17,6.44,2.98,6.55-.71-.02-.59-.23-1.15-.59-1.58.4,1.42-1.11,2.73-2.04,2.84.46-2.06-2.83-.75-3.48-2.45.06-2.46,2.78-4.26,5.34-3.43,2,.53,3.88,2.58,4.94,4.41v-.02c1.31,2.19,3.28,3.97,5.72,4.86h0c-3.44-1.4-5.53-5.24-6.44-8.71-.34-1.49.19-2.44.87-3.75.74-1.42-.09-2.34-.42-3.88-.09.14-.17.31-.26.5-1.27,2.39-1.47,5.14-.82,7.69-1.82-1.79-4.38-2.84-6.89-1.86-2.37.85-3.57,3.81-2.47,6.07Zm85.65-6.45c3.07-.21,3.91,3.34,3.6,4.15,2.9-1.74,1.89-5.22-.6-5.32.12-.04.24-.08.36-.12,3.39-1.02,7.13-.69,9.99.89,2.15,1.18,3.61,2.92,4.21,5.03.47,1.67.23,3.45-.7,5-1.01,1.69-2.7,2.91-4.63,3.34-2.97.66-5.93-1.22-6.59-4.19-.25-1.13-.05-2.29.57-3.27.31-.49.7-.9,1.16-1.22,3.48-1.95,4.23,3.24,4.88.49.24.31.58,1.75,1.3,2.64,1.1-2.57-.92-5.28-4.28-5.07-3.36.21-4.56,2.81-4.56,5.48h0c0,.37.04.75.12,1.13.66,2.95,3.29,4.97,6.2,4.97.45,0,.91-.05,1.38-.15,2.15-.48,4.03-1.83,5.16-3.72,1.04-1.75,1.32-3.75.79-5.64-.66-2.33-2.25-4.24-4.6-5.53-.96-.52-2.01-.9-3.11-1.17,1.93-.55,2.46-3.01,1.89-4.45-2.53,3.53-8.84,2.84-15.16,7.16-4.96,2.88-7.49,6.46-7.63,6.65h0c.04-.05,7.18-6.86,10.25-7.07Zm17.71-1.37h0c.14.21,2.75,3.89,7.87,6.87,6.53,4.45,13.03,3.75,15.65,7.38.59-1.48.04-4.03-1.95-4.59,1.13-.27,2.22-.66,3.21-1.2,2.43-1.33,4.07-3.3,4.75-5.7.55-1.95.27-4.02-.81-5.83-1.16-1.95-3.1-3.35-5.32-3.84-.48-.11-.95-.16-1.42-.16-3,0-5.72,2.08-6.39,5.13-.09.39-.12.78-.12,1.17h0c0,2.75,1.25,5.44,4.71,5.65,3.46.21,5.55-2.58,4.42-5.23-.74.92-1.1,2.4-1.34,2.72-.67-2.84-1.45,2.52-5.04.51-.47-.33-.88-.76-1.2-1.26-.64-1.01-.85-2.21-.59-3.37.68-3.07,3.73-5.01,6.8-4.33,1.99.44,3.73,1.7,4.78,3.44.96,1.6,1.21,3.43.72,5.16-.62,2.18-2.12,3.97-4.34,5.19-2.96,1.62-6.82,1.96-10.31.91-.13-.04-.25-.09-.38-.13,2.57-.11,3.61-3.69.62-5.49.32.85-.55,4.5-3.72,4.29-3.17-.22-10.54-7.24-10.57-7.3Zm-20.12-.68c2.79-3.75,10.64-2.19,7.99-4.44,0,0,2.28.06,3.24-1.91-5.03.11-7.35.92-11.24,6.35Zm59.03-.05c4.08-2.26,10.6,2.39,9.11-.75,0,0,2.06.99,3.74-.4-4.63-1.97-7.08-2.2-12.85,1.16Zm-61.05-3.31c1.7-.05,3.36-1.85,3.43-3.71-9.15,1.15-9.99,10.68-9.96,14.89,1.78-8.81,11.39-10.47,6.53-11.18Zm64.6,5.79c-2.51-.97-5.07.07-6.89,1.86.65-2.56.44-5.3-.82-7.69-.08-.18-.17-.35-.26-.5-.33,1.54-1.15,2.45-.42,3.88.68,1.31,1.2,2.26.87,3.75-.92,3.47-3.01,7.31-6.44,8.71h0c2.44-.89,4.41-2.67,5.71-4.86v.02c1.06-1.84,2.95-3.89,4.95-4.41,2.56-.84,5.27.97,5.34,3.43-.65,1.7-3.94.39-3.48,2.45-.93-.1-2.44-1.41-2.04-2.84-.36.42-.57.99-.59,1.58.11,3.68,5.33,3.88,6.55.71,1.1-2.25-.1-5.22-2.47-6.07Z"/>
+                        </g>
+                    </svg>
+                </div>
                 <p class="preambule">Kami mengundang <b>Your Name Here</b> untuk hadir dalam acara pernikahan kami pada:</p>
                 <div class="date">
                     <div class="centered-date">
@@ -967,13 +1017,23 @@
                     <a href="#" target="_blank" class="cta-button action-button" id="add-to-calendar-btn">Add to Calendar</a>
                     <a href="#" target="_blank" class="cta-button action-button" id="google-maps-btn">Google Maps</a>
                 </div>
-                <hr>
+                <svg class="event-separator-svg" viewBox="0 0 121.64 8.01" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <path fill="currentColor" d="m31.88,7.66c1.16.84,1.82.03,2.47-.88.83-1.16,1.88-1.97,2.53-2.4h47.89c.65.43,1.7,1.24,2.53,2.4.65.91,1.31,1.72,2.47.88-.37-1.8-1.59-2.79-3.36-3.28h19.2v.56c0,.41.33.75.75.75s.75-.33.75-.75v-.56h10.44c.37.44-.01.88-.98.66-1.26-.29-3.11-.34-3.11-.34,3.64.85,5.46,3.01,5.46,3.01.34-.92.5-2.27,0-2.64.58.16,2.61-.71,2.74-1.06-.13-.35-2.16-1.22-2.74-1.06.5-.37.34-1.72,0-2.64,0,0-1.82,2.16-5.46,3.01,0,0,1.85-.05,3.11-.34.97-.22,1.35.21.98.66h-10.44v-.56c0-.41-.33-.75-.75-.75s-.75.33-.75.75v.56h-19.2c1.77-.49,2.99-1.48,3.36-3.28-1.16-.84-1.82-.03-2.47.88-.83,1.16-1.88,1.97-2.53,2.4h-47.89c-.65-.43-1.7-1.24-2.53-2.4-.65-.91-1.31-1.72-2.47-.88.37,1.8,1.59,2.79,3.36,3.28h-19.2v-.56c0-.41-.33-.75-.75-.75s-.75.33-.75.75v.56H4.11c-.38-.44,0-.88.98-.66,1.26.29,3.11.34,3.11.34C4.55,2.46,2.74.3,2.74.3c-.34.92-.5,2.27,0,2.64-.58-.16-2.61.71-2.74,1.06.13.35,2.16,1.22,2.74,1.06-.5.37-.34,1.72,0,2.64,0,0,1.82-2.16,5.46-3.01,0,0-1.85.05-3.11.34-.97.22-1.35-.21-.98-.66h10.44v.56c0,.41.33.75.75.75s.75-.33.75-.75v-.56h19.2c-1.77.49-2.98,1.48-3.36,3.28Z"></path>
+                    </g>
+                </svg>
                 <div class="timeline reveal" data-parallax-speed="0.15">
                     <div class="timeline-item right reveal"><div class="timeline-content"><h3>Resepsi</h3><p>9:00 - 13.00 WITA</p></div></div>
                     <div class="timeline-item left reveal"><div class="timeline-content"><h3>Akad</h3><p>9:00 - 12:00 WITA</p></div></div>
                 </div>
                 <p class="timeline-note reveal" data-parallax-speed="-0.1">kedatanganmu akan sangat berarti dalam awalan perjalanan kami</p>
-                <div><br><br><br><br><br>put element here </div>
+                <div>
+                    <svg class="topframe-svg" viewBox="0 0 161.97 30.95" xmlns="http://www.w3.org/2000/svg" style="transform: scaleY(-1);  margin: 20px auto 20px;">
+                        <g>
+                        <path fill="currentColor" d="m81.99,13.82c0,.38-.45.69-1,.69s-1-.31-1-.69.45-.69,1-.69,1,.31,1,.69Zm-1,9.56c-.23,1.26-.86,2.25-1.65,2.62.8.37,1.42,1.35,1.65,2.62.23-1.26.86-2.25,1.65-2.62-.8-.37-1.42-1.35-1.65-2.62Zm4.63-19.96c-1.47-.69-2.43-.66-3.3,0,.25-1.46-1.33-3.43-1.33-3.43,0,0-1.58,1.97-1.33,3.43-.88-.66-1.83-.69-3.3,0,3.45,1.64,4.63,8.38,4.63,8.38,0,0,1.19-6.75,4.63-8.38Zm2.44,8.2c1.7-.05,3.36-1.85,3.43-3.71-9.15,1.15-9.99,10.68-9.96,14.89,1.78-8.81,11.39-10.47,6.53-11.18Zm-8.34,12.48h0c-.14-.2-2.67-3.77-7.63-6.65-6.32-4.31-12.63-3.63-15.16-7.16-.57,1.44-.04,3.9,1.89,4.45-1.1.26-2.15.64-3.11,1.17-2.35,1.29-3.94,3.2-4.6,5.53-.54,1.89-.26,3.9.79,5.64,1.13,1.89,3,3.24,5.16,3.72.46.1.92.15,1.38.15,2.91,0,5.54-2.02,6.2-4.97.08-.38.12-.75.12-1.13h0c0-2.67-1.21-5.27-4.56-5.48-3.36-.21-5.38,2.5-4.28,5.07.72-.89,1.06-2.33,1.3-2.64.65,2.75,1.4-2.44,4.88-.49.46.32.85.73,1.16,1.22.62.98.83,2.14.57,3.27-.66,2.97-3.62,4.86-6.59,4.19-1.93-.43-3.62-1.64-4.63-3.34-.93-1.55-1.17-3.33-.7-5,.6-2.11,2.05-3.85,4.21-5.03,2.87-1.57,6.6-1.9,9.99-.89.12.04.24.08.36.12-2.49.1-3.5,3.58-.6,5.32-.31-.82.53-4.36,3.6-4.15,3.07.21,10.21,7.02,10.25,7.07Zm-38.53-1.15c-3.17.22-4.03-3.44-3.72-4.29-3,1.8-1.95,5.39.62,5.49-.13.04-.25.09-.38.13-3.5,1.05-7.35.71-10.31-.91-2.22-1.22-3.72-3.01-4.34-5.19-.49-1.72-.23-3.56.72-5.16,1.04-1.75,2.78-3,4.78-3.44,3.07-.68,6.12,1.26,6.8,4.33.26,1.17.05,2.36-.59,3.37-.32.5-.73.93-1.2,1.26-3.59,2.01-4.37-3.34-5.04-.51-.25-.32-.6-1.8-1.34-2.72-1.13,2.65.95,5.44,4.42,5.23,3.46-.21,4.71-2.9,4.71-5.66h0c0-.38-.04-.77-.12-1.16-.68-3.05-3.39-5.13-6.39-5.13-.47,0-.94.05-1.42.16-2.22.49-4.16,1.89-5.32,3.84-1.08,1.8-1.36,3.87-.81,5.83.68,2.4,2.32,4.37,4.75,5.7.99.54,2.08.93,3.21,1.2-1.99.56-2.54,3.1-1.95,4.59,2.62-3.64,9.12-2.93,15.65-7.38,5.12-2.97,7.73-6.66,7.87-6.87h0c-.04.06-7.41,7.08-10.57,7.3Zm19.46-14.33c.96,1.97,3.24,1.91,3.24,1.91-2.65,2.25,5.21.7,7.99,4.44-3.88-5.44-6.2-6.24-11.24-6.35ZM0,13.77c1.68,1.4,3.74.4,3.74.4-1.49,3.14,5.03-1.51,9.11.75-5.78-3.35-8.22-3.13-12.85-1.16Zm80.44,9.02c.03-4.21-.81-13.74-9.96-14.89.07,1.86,1.72,3.66,3.43,3.71-4.86.7,4.75,2.36,6.53,11.18Zm-73.6.69c1.22,3.17,6.44,2.98,6.55-.71-.02-.59-.23-1.15-.59-1.58.4,1.42-1.11,2.73-2.04,2.84.46-2.06-2.83-.75-3.48-2.45.06-2.46,2.78-4.26,5.34-3.43,2,.53,3.88,2.58,4.94,4.41v-.02c1.31,2.19,3.28,3.97,5.72,4.86h0c-3.44-1.4-5.53-5.24-6.44-8.71-.34-1.49.19-2.44.87-3.75.74-1.42-.09-2.34-.42-3.88-.09.14-.17.31-.26.5-1.27,2.39-1.47,5.14-.82,7.69-1.82-1.79-4.38-2.84-6.89-1.86-2.37.85-3.57,3.81-2.47,6.07Zm85.65-6.45c3.07-.21,3.91,3.34,3.6,4.15,2.9-1.74,1.89-5.22-.6-5.32.12-.04.24-.08.36-.12,3.39-1.02,7.13-.69,9.99.89,2.15,1.18,3.61,2.92,4.21,5.03.47,1.67.23,3.45-.7,5-1.01,1.69-2.7,2.91-4.63,3.34-2.97.66-5.93-1.22-6.59-4.19-.25-1.13-.05-2.29.57-3.27.31-.49.7-.9,1.16-1.22,3.48-1.95,4.23,3.24,4.88.49.24.31.58,1.75,1.3,2.64,1.1-2.57-.92-5.28-4.28-5.07-3.36.21-4.56,2.81-4.56,5.48h0c0,.37.04.75.12,1.13.66,2.95,3.29,4.97,6.2,4.97.45,0,.91-.05,1.38-.15,2.15-.48,4.03-1.83,5.16-3.72,1.04-1.75,1.32-3.75.79-5.64-.66-2.33-2.25-4.24-4.6-5.53-.96-.52-2.01-.9-3.11-1.17,1.93-.55,2.46-3.01,1.89-4.45-2.53,3.53-8.84,2.84-15.16,7.16-4.96,2.88-7.49,6.46-7.63,6.65h0c.04-.05,7.18-6.86,10.25-7.07Zm17.71-1.37h0c.14.21,2.75,3.89,7.87,6.87,6.53,4.45,13.03,3.75,15.65,7.38.59-1.48.04-4.03-1.95-4.59,1.13-.27,2.22-.66,3.21-1.2,2.43-1.33,4.07-3.3,4.75-5.7.55-1.95.27-4.02-.81-5.83-1.16-1.95-3.1-3.35-5.32-3.84-.48-.11-.95-.16-1.42-.16-3,0-5.72,2.08-6.39,5.13-.09.39-.12.78-.12,1.17h0c0,2.75,1.25,5.44,4.71,5.65,3.46.21,5.55-2.58,4.42-5.23-.74.92-1.1,2.4-1.34,2.72-.67-2.84-1.45,2.52-5.04.51-.47-.33-.88-.76-1.2-1.26-.64-1.01-.85-2.21-.59-3.37.68-3.07,3.73-5.01,6.8-4.33,1.99.44,3.73,1.7,4.78,3.44.96,1.6,1.21,3.43.72,5.16-.62,2.18-2.12,3.97-4.34,5.19-2.96,1.62-6.82,1.96-10.31.91-.13-.04-.25-.09-.38-.13,2.57-.11,3.61-3.69.62-5.49.32.85-.55,4.5-3.72,4.29-3.17-.22-10.54-7.24-10.57-7.3Zm-20.12-.68c2.79-3.75,10.64-2.19,7.99-4.44,0,0,2.28.06,3.24-1.91-5.03.11-7.35.92-11.24,6.35Zm59.03-.05c4.08-2.26,10.6,2.39,9.11-.75,0,0,2.06.99,3.74-.4-4.63-1.97-7.08-2.2-12.85,1.16Zm-61.05-3.31c1.7-.05,3.36-1.85,3.43-3.71-9.15,1.15-9.99,10.68-9.96,14.89,1.78-8.81,11.39-10.47,6.53-11.18Zm64.6,5.79c-2.51-.97-5.07.07-6.89,1.86.65-2.56.44-5.3-.82-7.69-.08-.18-.17-.35-.26-.5-.33,1.54-1.15,2.45-.42,3.88.68,1.31,1.2,2.26.87,3.75-.92,3.47-3.01,7.31-6.44,8.71h0c2.44-.89,4.41-2.67,5.71-4.86v.02c1.06-1.84,2.95-3.89,4.95-4.41,2.56-.84,5.27.97,5.34,3.43-.65,1.7-3.94.39-3.48,2.45-.93-.1-2.44-1.41-2.04-2.84-.36.42-.57.99-.59,1.58.11,3.68,5.33,3.88,6.55.71,1.1-2.25-.1-5.22-2.47-6.07Z"/>
+                        </g>
+                    </svg>
+                </div>
             
             </section>
             
@@ -1001,10 +1061,10 @@
             </section>
             
             <!-- Wishes Display Section -->
-            <section class="dark-section reveal">
-                <div class="container">
+            <section class="dark-section">
+                <div class="container reveal">
                     <h2>Your beautiful<br>WISHES</h2>
-                    <div class="wishes-outer-container">
+                    <div class="wishes-outer-container reveal">
                         <div id="wishes-list" class="wishes-list">
                             <!-- Wishes will be populated by JS -->
                         </div>
@@ -1022,16 +1082,19 @@
             
             <!-- Outro Section -->
             <section class="outro reveal">
-                <div class="outro-text-content">
+                <div class="outro-text-content reveal">
                     <p class="outro-date">07 . 09 . 2025</p>
                     <h2>See You<br>There</h2>
                     <p class="outro-thankyou">Thank you for your wishes and prayers.</p>
                 </div>
-                <img class="preload-asset" src="img3.png" alt="Couple final photo" class="outro-bg-image">
+                <div class="outro-footer reveal" >
+                    <p>Crafted with love</p>
+                </div>
+                <img  src="img3.png" alt="Couple final photo" class="outro-bg-image">
                 <div class="outro-bg-overlay"></div>
             </section>
             
-            <footer class="reveal"><p>Crafted with love</p></footer>
+            <!-- <footer class="reveal"><p>Crafted with love</p></footer> -->
         </main>
     </div>
     
@@ -1048,7 +1111,7 @@
         </div>
     </div>
 
-    <!-- Lightbox Modal for Gallery -->
+    <!-- Lightbox Modal for Gallery --- -->
     <div id="lightbox-modal">
         <span class="close-button">&times;</span>
         <img class="lightbox-content" id="lightbox-img">
@@ -1124,8 +1187,8 @@
         function setupActionLinks() {
             const eventDetails = {
                 title: 'Wedding: Gibran & Diyang',
-                date: '20250907T110000Z', // 7PM WITA (UTC+8) is 11:00 UTC
-                endDate: '20250907T130000Z', // 9PM WITA (UTC+8) is 13:00 UTC
+                date: '20250907T010000Z', // 9AM WITA (UTC+8) is 1:00 UTC
+                endDate: '20250907T050000Z', // 13AM WITA (UTC+8) is 5:00 UTC
                 location: 'Gedung Serbaguna ULM, Banjarbaru, South Kalimantan',
                 description: 'Join us to celebrate the wedding of Gibran and Diyang!'
             };
@@ -1203,13 +1266,12 @@
             { thumb: 'gal3.jpg', full: 'gal3.jpg' },
             { thumb: 'gal4.jpg', full: 'gal4.jpg' },
             { thumb: 'img1.jpg', full: 'img1.jpg' },
-            { thumb: 'img2.jpg', full: 'img2.jpg' },
-            { thumb: 'img3.jpg', full: 'img3.jpg' }
+            { thumb: 'img2.jpg', full: 'img2.jpg' }
         ];
 
         const createGalleryItem = (imgData) => {
             const item = document.createElement('div');
-            item.className = 'gallery-item';
+            item.className = 'gallery-item reveal';
             
             const img = document.createElement('img');
             img.src = imgData.thumb; 
@@ -1226,11 +1288,15 @@
         };
 
         galleryImages.forEach(imgData => {
-            galleryScroller.appendChild(createGalleryItem(imgData));
+            const item = createGalleryItem(imgData);
+            galleryScroller.appendChild(item);
+            revealObserver.observe(item); // <-- Add this line
         });
 
         galleryImages.forEach(imgData => {
-            galleryScroller.appendChild(createGalleryItem(imgData));
+            const item = createGalleryItem(imgData);
+            galleryScroller.appendChild(item);
+            revealObserver.observe(item); // <-- Add this line
         });
 
         function closeLightbox() {
@@ -1302,8 +1368,8 @@
                 progress = Math.max(0, Math.min(1, progress));
                 const inset = 30 - 30 * progress;
                 const sideInset = 15 - 13 * progress;
-                const borderRadius = 40 - 40 * progress;
-                profile.style.clipPath = `inset(${inset}% ${sideInset}% ${inset}% ${sideInset}% round ${borderRadius}px)`;
+                // const borderRadius = 40 - 40 * progress;
+                profile.style.clipPath = `inset(${inset}% ${sideInset}% ${inset}% ${sideInset}% round 4px)`;
                 
                 // if(border) {
                 //     border.style.opacity = 1 - (progress * 1.5);
@@ -1368,6 +1434,49 @@
         // --- Initialize Action Links ---
         setupActionLinks();
 
+        // --- Dynamic Marquee Animation ---
+        function startMarqueeAnimation() {
+            const scroller = galleryScroller;
+            const totalWidth = scroller.scrollWidth;
+            const visibleWidth = scroller.offsetWidth;
+            const scrollDistance = totalWidth - visibleWidth +300;
+            const speed = 30; // px per second (adjust as desired)
+            const duration = scrollDistance / speed ; // seconds
+
+            let startTime = null;
+
+            function animateScroll(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = (timestamp - startTime) / 1000; // seconds
+                let progress = elapsed / duration;
+                if (progress > 1) progress = 1;
+
+                scroller.style.transform = `translateX(${-scrollDistance * progress}px)`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateScroll);
+                } else {
+                    // Fade out, reset, fade in, then restart
+                    scroller.classList.add('fade-out');
+                    setTimeout(() => {
+                        scroller.style.transform = 'translateX(0)';
+                        scroller.classList.remove('fade-out');
+                        startTime = null;
+                        setTimeout(() => {
+                            requestAnimationFrame(animateScroll);
+                        }, 100); // Small delay for fade-in
+                    }, 500); // Match fade-out duration
+                }
+            }
+
+            // Start the animation
+            scroller.style.transform = 'translateX(0)';
+            scroller.classList.remove('fade-out');
+            requestAnimationFrame(animateScroll);
+        }
+
+        // After all gallery items are appended:
+        startMarqueeAnimation();
         
     });
     </script>
