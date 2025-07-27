@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anindia & Mustofiq's Wedding Registry</title>
+    <title>Digiland's Wedding Registry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,10 +95,10 @@
         <header class="text-center mb-12">
             <div class="hero-bg h-64 md:h-80 rounded-lg flex items-center justify-center text-white shadow-lg">
                 <div class="bg-black bg-opacity-40 p-6 rounded-lg">
-                    <h1 class="text-4xl md:text-6xl font-bold">Anindia & Mustofiq</h1>
+                    <h1 class="text-4xl md:text-6xl font-bold">DIGILAND</h1>
                     <p class="mt-2 text-lg md:text-xl tracking-widest">WEDDING REGISTRY</p>
                     <p class="mt-4 text-md md:text-lg bg-white bg-opacity-20 inline-block px-4 py-1 rounded-full">
-                        TUESDAY, MARCH 25, 2025
+                        Minggu, 07 September 2025
                     </p>
                 </div>
             </div>
@@ -119,7 +119,7 @@
                     Dearest friends and family, thank you so much for visiting our wedding registry. Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have put together a list of items we would love to have as we begin our new life together. We are so excited to celebrate our special day with you!
                 </p>
                 <p class="mt-4 text-lg text-gray-600">With love,</p>
-                <p class="mt-2 text-2xl font-serif text-gray-700">Anindia & Mustofiq</p>
+                <p class="mt-2 text-2xl font-serif text-gray-700">Gibran & Diyang</p>
             </section>
 
             <section id="gift-list">
@@ -157,8 +157,8 @@
                 <div class="text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
                     <p class="mb-2">For your convenience, please have all gifts shipped to the following address:</p>
                     <div class="bg-gray-100 p-4 rounded-md border border-gray-200">
-                        <p class="font-bold">Anindia Wahyu & Mustofiq</p>
-                        <p>Jl. Bahagia Selalu No. 25</p>
+                        <p class="font-bold">Gibran & Diyang</p>
+                        <p>Jl. Ratu Elok</p>
                         <p>Jakarta Selatan, 12345</p>
                         <p>Indonesia</p>
                     </div>
@@ -179,24 +179,19 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // --- SIMULATED USER & DATA ---
-            const currentUserId = 'user-123'; // Simulate the current user
+            // --- REAL DATA FROM SERVER ---
+            let gifts = [];
+            let currentUserId = null;
             const BOOKING_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
-            let gifts = [
-                { id: 1, name: 'AZKO Kris Hair Dryer Travel 600 Watt', price: 104900, image: 'https://placehold.co/400x400/EAD9D5/333?text=Hair+Dryer', category: 'Electronics', url: '#', status: 'unpledged', bookedBy: null, bookedUntil: null },
-                { id: 2, name: 'Informa Filio Meja Setrika Lipat Classic', price: 230000, image: 'https://placehold.co/400x400/E0E0E0/333?text=Ironing+Board', category: 'Home', url: '#', status: 'purchased', bookedBy: 'user-456', bookedUntil: null },
-                { id: 3, name: 'COOGER Alat Pel Lantai Putar', price: 223600, image: 'https://placehold.co/400x400/D4E6F1/333?text=Spin+Mop', category: 'Home', url: '#', status: 'purchased', bookedBy: 'user-789', bookedUntil: null },
-                { id: 4, name: 'Nyonya Piyama Poly Bamboo Oversized Cozy Set', price: 269000, image: 'https://placehold.co/400x400/D5C6E0/333?text=Pajamas', category: 'Home', url: '#', status: 'unpledged', bookedBy: null, bookedUntil: null },
-                { id: 5, name: 'Krisbow Cordless Electric Cleaning Brush', price: 448700, image: 'https://placehold.co/400x400/CFD8DC/333?text=Cleaning+Brush', category: 'Home', url: '#', status: 'purchased', bookedBy: 'user-abc', bookedUntil: null },
-                { id: 6, name: 'LocknLock Food Dehydrator', price: 899000, image: 'https://placehold.co/400x400/F5B7B1/333?text=Dehydrator', category: 'Kitchen', url: '#', status: 'booked', bookedBy: 'user-xyz', bookedUntil: Date.now() + 5 * 60 * 1000 }, // Booked by someone else
-                { id: 7, name: 'XGODY Gimbal 5 Portable Proyector 4K', price: 759000, image: 'https://placehold.co/400x400/D6DBDF/333?text=Projector', category: 'Electronics', url: '#', status: 'purchased', bookedBy: 'user-456', bookedUntil: null },
-                { id: 8, name: 'Philips Airfryer NA220/10 - 4.2 L', price: 1085000, image: 'https://placehold.co/400x400/F2F3F4/333?text=Airfryer', category: 'Kitchen', url: '#', status: 'purchased', bookedBy: 'user-789', bookedUntil: null },
-                { id: 9, name: 'Informa Gio Lemari Pakaian 2 Pintu Putih', price: 979000, image: 'https://placehold.co/400x400/FDFEFE/333?text=Wardrobe', category: 'Home', url: '#', status: 'purchased', bookedBy: 'user-abc', bookedUntil: null },
-                { id: 10, name: 'Le Creuset Signature Round Dutch Oven', price: 4500000, image: 'https://placehold.co/400x400/E74C3C/333?text=Dutch+Oven', category: 'Kitchen', url: '#', status: 'booked', bookedBy: currentUserId, bookedUntil: Date.now() + 10 * 60 * 1000 }, // Booked by the current user
-                { id: 11, name: 'Bose QuietComfort Ultra Headphones', price: 6200000, image: 'https://placehold.co/400x400/5D6D7E/333?text=Headphones', category: 'Electronics', url: '#', status: 'unpledged', bookedBy: null, bookedUntil: null },
-                { id: 12, name: 'Nespresso VertuoPlus Coffee Machine', price: 3500000, image: 'https://placehold.co/400x400/34495E/333?text=Nespresso', category: 'Kitchen', url: '#', status: 'unpledged', bookedBy: null, bookedUntil: null },
-            ];
+            // Parse initial gifts data from server
+            try {
+                gifts = JSON.parse('<?php echo addslashes($initial_gifts_json); ?>');
+                currentUserId = <?php echo $this->session->userdata('user_id') ?: 'null'; ?>;
+            } catch (e) {
+                console.error('Error parsing gifts data:', e);
+                gifts = [];
+            }
 
             // --- STATE ---
             let currentFilter = 'all';
@@ -213,8 +208,7 @@
             // --- API / AJAX FUNCTIONS (PRODUCTION-READY) ---
             
             async function fetchGiftDetails(giftId) {
-                // In production, the URL will be your actual API endpoint.
-                const response = await fetch(`/api/get_gift_details.php?id=${giftId}`);
+                const response = await fetch(`/get_details?id=${giftId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -222,19 +216,20 @@
                 if (!result.success) {
                     throw new Error(result.message || 'Failed to fetch details.');
                 }
-                // For simulation, we add a description here. In production, it would come from the API.
-                result.data.description = `This ${result.data.name} is a fantastic addition to any home. Known for its durability and stylish design, it combines functionality with modern aesthetics. It's perfect for everyday use and for special occasions. We believe this will bring much joy and convenience to Anindia and Mustofiq's new life together.`;
+                // Add description if not provided by the server
+                if (!result.data.description) {
+                    result.data.description = `This ${result.data.name} is a fantastic addition to any home. Known for its durability and stylish design, it combines functionality with modern aesthetics. It's perfect for everyday use and for special occasions. We believe this will bring much joy and convenience to the couple's new life together.`;
+                }
                 return result.data;
             }
 
             async function bookGiftOnServer(giftId) {
-                const response = await fetch('/api/book_gift.php', {
+                const response = await fetch('/book', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ giftId: giftId })
                 });
                 if (!response.ok) {
-                    // Try to get a specific error message from the server
                     const errorResult = await response.json().catch(() => ({}));
                     throw new Error(errorResult.message || `HTTP error! status: ${response.status}`);
                 }
@@ -242,7 +237,7 @@
             }
             
             async function confirmPurchaseOnServer(giftId, orderNumber) {
-                 const response = await fetch('/api/confirm_purchase.php', {
+                 const response = await fetch('/confirm_purchase', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ giftId, orderNumber })
@@ -255,7 +250,7 @@
             }
 
             async function cancelBookingOnServer(giftId) {
-                 const response = await fetch('/api/cancel_booking.php', {
+                 const response = await fetch('/cancel_booking', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ giftId })
@@ -265,6 +260,18 @@
                     throw new Error(errorResult.message || `HTTP error! status: ${response.status}`);
                  }
                  return await response.json();
+            }
+
+            async function refreshGiftsList() {
+                const response = await fetch('/get_gifts');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                if (result.success) {
+                    gifts = result.data;
+                    renderGifts();
+                }
             }
 
 
@@ -303,12 +310,12 @@
                 let statusClass = '', buttonHtml = '', overlayHtml = '';
 
                 switch(gift.status) {
-                    case 'unpledged':
+                    case 'available':
                         buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Book this Gift</button>`;
                         break;
                     case 'booked':
                         statusClass = 'is-booked';
-                        if (gift.bookedBy === currentUserId) {
+                        if (gift.booked_by_user_id == currentUserId) {
                             buttonHtml = `<button data-id="${gift.id}" data-action="manage" class="action-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Manage Booking</button>`;
                             overlayHtml = `<div class="status-overlay" data-id="${gift.id}" data-action="manage"><div class="bg-green-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">You Booked This</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
                         } else {
@@ -342,7 +349,7 @@
                 const giftId = parseInt(target.dataset.id, 10);
                 const action = target.dataset.action;
                 const gift = gifts.find(g => g.id === giftId);
-                const userHasActiveBooking = gifts.some(g => g.status === 'booked' && g.bookedBy === currentUserId);
+                const userHasActiveBooking = gifts.some(g => g.status === 'booked' && g.booked_by_user_id == currentUserId);
 
                 if (action === 'book') {
                     if (userHasActiveBooking) {
@@ -360,12 +367,7 @@
                 modalContent.innerHTML = `<div class="p-8 flex items-center justify-center min-h-[400px]"><div class="loader"></div></div>`;
                 
                 try {
-                    // This is a simulation. In production, you would use the real fetch function.
-                    const giftDetails = await new Promise(resolve => setTimeout(() => {
-                        const gift = gifts.find(g => g.id === giftId);
-                        const description = `This ${gift.name} is a fantastic addition to any home. Known for its durability and stylish design, it combines functionality with modern aesthetics. It's perfect for everyday use and for special occasions. We believe this will bring much joy and convenience to Anindia and Mustofiq's new life together.`;
-                        resolve({ ...gift, description });
-                    }, 1000));
+                    const giftDetails = await fetchGiftDetails(giftId);
 
                     const formatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
 
@@ -404,15 +406,19 @@
             const confirmBooking = async (e) => {
                 const giftId = parseInt(e.currentTarget.dataset.id, 10);
                 try {
-                    // This is a simulation. In production, you would use the real bookGiftOnServer function.
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    const gift = gifts.find(g => g.id === giftId);
-                    gift.status = 'booked';
-                    gift.bookedBy = currentUserId;
-                    gift.bookedUntil = Date.now() + BOOKING_DURATION_MS;
-                    renderGifts();
-                    startCountdownTimer();
-                    showPostBookingModal(gift);
+                    const result = await bookGiftOnServer(giftId);
+                    if (result.success) {
+                        // Refresh the gifts list from server
+                        await refreshGiftsList();
+                        startCountdownTimer();
+                        // Find the updated gift
+                        const gift = gifts.find(g => g.id === giftId);
+                        if (gift) {
+                            showPostBookingModal(gift);
+                        }
+                    } else {
+                        showInfoModal('Booking Failed', result.message);
+                    }
                 } catch (error) {
                     showInfoModal('Booking Failed', error.message);
                 }
@@ -457,13 +463,18 @@
                 const orderNumber = document.getElementById('order-number').value;
                 
                 try {
-                    // This is a simulation. In production, use the real confirmPurchaseOnServer function.
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    const gift = gifts.find(g => g.id === giftId);
-                    gift.status = 'purchased';
-                    gift.bookedUntil = null;
-                    renderGifts();
-                    showThankYouModal(gift);
+                    const result = await confirmPurchaseOnServer(giftId, orderNumber);
+                    if (result.success) {
+                        // Refresh the gifts list from server
+                        await refreshGiftsList();
+                        // Find the updated gift
+                        const gift = gifts.find(g => g.id === giftId);
+                        if (gift) {
+                            showThankYouModal(gift);
+                        }
+                    } else {
+                        showInfoModal('Error', result.message || 'Could not confirm purchase. Please try again.');
+                    }
                 } catch (error) {
                     showInfoModal('Error', 'Could not confirm purchase. Please try again.');
                 }
@@ -472,14 +483,14 @@
             const cancelBooking = async (e) => {
                 const giftId = parseInt(e.currentTarget.dataset.id, 10);
                 try {
-                    // This is a simulation. In production, use the real cancelBookingOnServer function.
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    const gift = gifts.find(g => g.id === giftId);
-                    gift.status = 'unpledged';
-                    gift.bookedBy = null;
-                    gift.bookedUntil = null;
-                    renderGifts();
-                    hideModal();
+                    const result = await cancelBookingOnServer(giftId);
+                    if (result.success) {
+                        // Refresh the gifts list from server
+                        await refreshGiftsList();
+                        hideModal();
+                    } else {
+                        showInfoModal('Error', result.message || 'Could not cancel booking. Please try again.');
+                    }
                 } catch (error) {
                     showInfoModal('Error', 'Could not cancel booking. Please try again.');
                 }
@@ -521,17 +532,16 @@
             };
 
             const updateCountdowns = () => {
-                const now = Date.now();
+                const now = new Date();
                 let activeBookings = false;
                 gifts.forEach(gift => {
-                    if (gift.status === 'booked' && gift.bookedUntil) {
+                    if (gift.status === 'booked' && gift.booked_until) {
                         activeBookings = true;
-                        const timeLeft = gift.bookedUntil - now;
+                        const bookedUntil = new Date(gift.booked_until);
+                        const timeLeft = bookedUntil.getTime() - now.getTime();
                         if (timeLeft <= 0) {
-                            gift.status = 'unpledged';
-                            gift.bookedBy = null;
-                            gift.bookedUntil = null;
-                            renderGifts();
+                            // Booking expired, refresh the list
+                            refreshGiftsList();
                         } else {
                             const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
                             const seconds = Math.floor((timeLeft / 1000) % 60);

@@ -1,0 +1,316 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * Gift Model
+ * 
+ * Handles all database operations for the wedding registry gift system.
+ * This model manages users, gifts, bookings, and purchases.
+ * 
+ * @property CI_DB_query_builder $db
+ */
+class Gift_model extends CI_Model {
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * Get or create user by username
+     * 
+     * @param string $username The username to search for or create
+     * @return array|false User data array or false on failure
+     */
+    public function get_user_by_username($username) {
+        // First, try to find existing user
+        $user = $this->db->where('username', $username)->get('users')->row_array();
+        
+        if ($user) {
+            return $user;
+        }
+        
+        // If user doesn't exist, create new user with default values
+        $user_data = [
+            'username' => $username,
+            'name' => ucfirst(str_replace(['_', '-'], ' ', $username)), // Convert username to readable name
+            'phone' => null,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        $this->db->insert('users', $user_data);
+        
+        if ($this->db->affected_rows() > 0) {
+            return $this->get_user_by_username($username); // Return the newly created user
+        }
+        
+        return false;
+    }
+
+    /**
+     * Update user information
+     * 
+     * @param int $user_id The user ID
+     * @param array $data User data to update
+     * @return bool True on success, false on failure
+     */
+    public function update_user($user_id, $data) {
+        $this->db->where('id', $user_id);
+        return $this->db->update('users', $data);
+    }
+
+    /**
+     * Get all users
+     * 
+     * @return array Array of all users
+     */
+    public function get_all_users() {
+        $this->db->order_by('created_at', 'DESC');
+        return $this->db->get('users')->result_array();
+    }
+
+    /**
+     * Get user by ID
+     * 
+     * @param int $user_id The user ID
+     * @return array|false User data array or false if not found
+     */
+    public function get_user($user_id) {
+        return $this->db->where('id', $user_id)->get('users')->row_array();
+    }
+
+    /**
+     * Delete user
+     * 
+     * @param int $user_id The user ID
+     * @return bool True on success, false on failure
+     */
+    public function delete_user($user_id) {
+        // First, clear any bookings/purchases by this user
+        $this->db->where('booked_by_user_id', $user_id);
+        $this->db->update('gifts', ['booked_by_user_id' => null, 'booked_until' => null, 'status' => 'available']);
+        
+        $this->db->where('purchased_by_user_id', $user_id);
+        $this->db->update('gifts', ['purchased_by_user_id' => null]);
+        
+        // Then delete the user
+        $this->db->where('id', $user_id);
+        return $this->db->delete('users');
+    }
+
+    /**
+     * Get all gifts from the database
+     * 
+     * @return array Array of all gifts
+     */
+    public function get_all_gifts() {
+        $this->db->select('g.*, u.username as booked_by_username, u.name as booked_by_name, pu.username as purchased_by_username, pu.name as purchased_by_name');
+        $this->db->from('gifts g');
+        $this->db->join('users u', 'u.id = g.booked_by_user_id', 'left');
+        $this->db->join('users pu', 'pu.id = g.purchased_by_user_id', 'left');
+        $this->db->order_by('g.id', 'ASC');
+        
+        return $this->db->get()->result_array();
+    }
+
+    /**
+     * Get a single gift by ID
+     * 
+     * @param int $gift_id The gift ID
+     * @return array|false Gift data array or false if not found
+     */
+    public function get_gift($gift_id) {
+        $this->db->select('g.*, u.username as booked_by_username, u.name as booked_by_name, pu.username as purchased_by_username, pu.name as purchased_by_name');
+        $this->db->from('gifts g');
+        $this->db->join('users u', 'u.id = g.booked_by_user_id', 'left');
+        $this->db->join('users pu', 'pu.id = g.purchased_by_user_id', 'left');
+        $this->db->where('g.id', $gift_id);
+        
+        return $this->db->get()->row_array();
+    }
+
+    /**
+     * Add new gift
+     * 
+     * @param array $data Gift data
+     * @return int|false New gift ID or false on failure
+     */
+    public function add_gift($data) {
+        $this->db->insert('gifts', $data);
+        return $this->db->affected_rows() > 0 ? $this->db->insert_id() : false;
+    }
+
+    /**
+     * Update gift
+     * 
+     * @param int $gift_id The gift ID
+     * @param array $data Gift data to update
+     * @return bool True on success, false on failure
+     */
+    public function update_gift($gift_id, $data) {
+        $this->db->where('id', $gift_id);
+        return $this->db->update('gifts', $data);
+    }
+
+    /**
+     * Delete gift
+     * 
+     * @param int $gift_id The gift ID
+     * @return bool True on success, false on failure
+     */
+    public function delete_gift($gift_id) {
+        $this->db->where('id', $gift_id);
+        return $this->db->delete('gifts');
+    }
+
+    /**
+     * Check if a user already has an active booking
+     * 
+     * @param int $user_id The user ID to check
+     * @return bool True if user has an active booking, false otherwise
+     */
+    public function check_user_booking($user_id) {
+        $this->db->where('booked_by_user_id', $user_id);
+        $this->db->where('status', 'booked');
+        $this->db->where('booked_until >', date('Y-m-d H:i:s')); // Only count non-expired bookings
+        
+        $count = $this->db->count_all_results('gifts');
+        
+        return $count > 0;
+    }
+
+    /**
+     * Book a gift for a user
+     * 
+     * @param int $gift_id The gift ID to book
+     * @param int $user_id The user ID booking the gift
+     * @return bool True on success, false on failure
+     */
+    public function book_gift($gift_id, $user_id) {
+        // Set booking expiry to 15 minutes from now
+        $booked_until = date('Y-m-d H:i:s', time() + (15 * 60));
+        
+        $data = [
+            'status' => 'booked',
+            'booked_by_user_id' => $user_id,
+            'booked_until' => $booked_until
+        ];
+        
+        $this->db->where('id', $gift_id);
+        $this->db->where('status', 'available'); // Only allow booking available gifts
+        
+        return $this->db->update('gifts', $data);
+    }
+
+    /**
+     * Confirm purchase of a gift
+     * 
+     * @param int $gift_id The gift ID
+     * @param int $user_id The user ID confirming the purchase
+     * @param string $order_number The order number from the purchase
+     * @return bool True on success, false on failure
+     */
+    public function confirm_purchase($gift_id, $user_id, $order_number) {
+        // Verify the gift was booked by this user
+        $this->db->where('id', $gift_id);
+        $this->db->where('booked_by_user_id', $user_id);
+        $this->db->where('status', 'booked');
+        
+        $gift = $this->db->get('gifts')->row_array();
+        
+        if (!$gift) {
+            return false; // Gift not found or not booked by this user
+        }
+        
+        $data = [
+            'status' => 'purchased',
+            'purchased_by_user_id' => $user_id,
+            'order_number' => $order_number,
+            'booked_by_user_id' => null, // Clear booking info
+            'booked_until' => null
+        ];
+        
+        $this->db->where('id', $gift_id);
+        
+        return $this->db->update('gifts', $data);
+    }
+
+    /**
+     * Cancel a booking
+     * 
+     * @param int $gift_id The gift ID
+     * @param int $user_id The user ID canceling the booking
+     * @return bool True on success, false on failure
+     */
+    public function cancel_booking($gift_id, $user_id) {
+        // Verify the gift was booked by this user
+        $this->db->where('id', $gift_id);
+        $this->db->where('booked_by_user_id', $user_id);
+        $this->db->where('status', 'booked');
+        
+        $gift = $this->db->get('gifts')->row_array();
+        
+        if (!$gift) {
+            return false; // Gift not found or not booked by this user
+        }
+        
+        $data = [
+            'status' => 'available',
+            'booked_by_user_id' => null,
+            'booked_until' => null
+        ];
+        
+        $this->db->where('id', $gift_id);
+        
+        return $this->db->update('gifts', $data);
+    }
+
+    /**
+     * Clean up expired bookings
+     * This method should be called periodically (e.g., via cron job)
+     * 
+     * @return int Number of expired bookings cleaned up
+     */
+    public function cleanup_expired_bookings() {
+        $this->db->where('status', 'booked');
+        $this->db->where('booked_until <', date('Y-m-d H:i:s'));
+        
+        $data = [
+            'status' => 'available',
+            'booked_by_user_id' => null,
+            'booked_until' => null
+        ];
+        
+        $this->db->update('gifts', $data);
+        
+        return $this->db->affected_rows();
+    }
+
+    /**
+     * Get statistics for admin dashboard
+     * 
+     * @return array Statistics data
+     */
+    public function get_statistics() {
+        $stats = [];
+        
+        // Total users
+        $stats['total_users'] = $this->db->count_all('users');
+        
+        // Total gifts
+        $stats['total_gifts'] = $this->db->count_all('gifts');
+        
+        // Available gifts
+        $stats['available_gifts'] = $this->db->where('status', 'available')->count_all_results('gifts');
+        
+        // Booked gifts
+        $stats['booked_gifts'] = $this->db->where('status', 'booked')->count_all_results('gifts');
+        
+        // Purchased gifts
+        $stats['purchased_gifts'] = $this->db->where('status', 'purchased')->count_all_results('gifts');
+        
+        // Recent users (last 7 days)
+        $stats['recent_users'] = $this->db->where('created_at >=', date('Y-m-d H:i:s', strtotime('-7 days')))->count_all_results('users');
+        
+        return $stats;
+    }
+} 

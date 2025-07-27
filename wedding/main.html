@@ -62,7 +62,7 @@
             --font-size-hero-h1: 3rem;
             --font-size-hero-dear: 1.2rem;
             --font-size-hero-subtitle: 1rem;
-            --font-size-gallery-names: 2.5rem;
+            --font-size-gallery-names: 3rem;
             --font-size-outro-h2: 5rem;
             --font-size-outro-date: 1.2rem;
             --font-size-outro-thankyou: 1rem;
@@ -759,7 +759,7 @@
             .hero-content h1 { font-size: 2.5rem; }
             .couple-info h2 { font-size: 2rem; }
             .event-details h2 { font-size: 2.8rem; }
-            .gallery-bg .names { font-size: 3.5rem; top: 40px; }
+            .gallery-bg .names { font-size: 2.5rem; top: 40px; }
             .dark-section h2 { font-size: 3rem; }
             .timeline::after { left: 30px; }
             .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
@@ -778,6 +778,10 @@
             .gallery-scroller {
                 column-width: 270px;
             }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-bg .names { font-size: 2rem; top: 40px; }
         }
     
         .animated-names {
@@ -828,12 +832,12 @@
         }
         
         .couple-separator-svg path {
-            stroke: var(--tertiary-accent);
-            stroke-width: 1;
-            fill: none;
+            /* stroke: var(--tertiary-accent); */
+            /* stroke-width: 0.4; */
+            /* fill: none; */
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: drawPath 2s ease-in-out forwards;
+            animation: drawPath 5s ease-in-out forwards;
         }
         .couple-separator-svg.flipped path {
             animation-delay: 0.5s;
