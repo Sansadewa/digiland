@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="<?php echo base_url('assets/Digiland.svg'); ?>" sizes="any" type="image/svg+xml" />
+
     <style>
         body {
             font-family: 'Lato', sans-serif;
@@ -335,10 +337,10 @@
 
                 if (currentView === 'grid') {
                     card.classList.add('flex', 'flex-col');
-                    card.innerHTML = `<div class="relative pb-[100%]"><img src="${gift.image}" alt="${gift.name}" class="absolute h-full w-full object-cover"></div><div class="p-4 flex flex-col flex-grow"><h3 class="font-semibold text-gray-800 flex-grow">${gift.name}</h3><p class="text-lg font-bold text-amber-800 mt-2">${formatter.format(gift.price)}</p><div class="mt-4">${buttonHtml}</div></div>${overlayHtml}`;
+                    card.innerHTML = `<div class="relative pb-[100%]"><img src="${gift.image_url}" alt="${gift.name}" class="absolute h-full w-full object-cover"></div><div class="p-4 flex flex-col flex-grow"><h3 class="font-semibold text-gray-800 flex-grow">${gift.name}</h3><p class="text-lg font-bold text-amber-800 mt-2">${formatter.format(gift.price)}</p><div class="mt-4">${buttonHtml}</div></div>${overlayHtml}`;
                 } else {
                     card.classList.add('flex', 'items-center', 'p-4');
-                    card.innerHTML = `<img src="${gift.image}" alt="${gift.name}" class="w-20 h-20 object-cover rounded-md mr-4"><div class="flex-grow"><h3 class="font-semibold text-gray-800">${gift.name}</h3><p class="text-md font-bold text-amber-800">${formatter.format(gift.price)}</p></div><div class="w-40 ml-4">${buttonHtml}</div>${overlayHtml}`;
+                    card.innerHTML = `<img src="${gift.image_url}" alt="${gift.name}" class="w-20 h-20 object-cover rounded-md mr-4"><div class="flex-grow"><h3 class="font-semibold text-gray-800">${gift.name}</h3><p class="text-md font-bold text-amber-800">${formatter.format(gift.price)}</p></div><div class="w-40 ml-4">${buttonHtml}</div>${overlayHtml}`;
                 }
                 return card;
             };
@@ -376,7 +378,7 @@
                         <div class="p-6">
                             <h3 class="text-2xl font-serif mb-4 text-gray-800">Book this Gift</h3>
                             <div class="flex flex-col md:flex-row gap-6 mb-4">
-                                <img src="${giftDetails.image}" class="w-full md:w-1/3 h-auto object-cover rounded-lg">
+                                <img src="${giftDetails.image_url}" class="w-full md:w-1/3 h-auto object-cover rounded-lg">
                                 <div class="flex-grow">
                                     <h4 class="text-xl font-bold">${giftDetails.name}</h4>
                                     <p class="text-2xl font-bold text-amber-800 my-2">${formatter.format(giftDetails.price)}</p>
@@ -388,7 +390,7 @@
                                 <p class="text-sm text-gray-700">Anindia & Mustofiq, Jl. Bahagia Selalu No. 25, Jakarta Selatan, 12345, Indonesia</p>
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between gap-3">
-                                <button onclick="window.open('${giftDetails.url}', '_blank')" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex-grow"><i class="fas fa-shopping-cart mr-2"></i>View on Store</button>
+                                <button onclick="window.open('${giftDetails.store_url}', '_blank')" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex-grow"><i class="fas fa-shopping-cart mr-2"></i>View on Store</button>
                                 <div class="flex gap-3">
                                     <button id="cancel-modal" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold">Cancel</button>
                                     <button id="confirm-book" data-id="${giftDetails.id}" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold">Confirm & Book</button>

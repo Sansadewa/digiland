@@ -30,18 +30,18 @@ class Gift_model extends CI_Model {
         }
         
         // If user doesn't exist, create new user with default values
-        $user_data = [
-            'username' => $username,
-            'name' => ucfirst(str_replace(['_', '-'], ' ', $username)), // Convert username to readable name
-            'phone' => null,
-            'created_at' => date('Y-m-d H:i:s')
-        ];
+        // $user_data = [
+        //     'username' => $username,
+        //     'name' => ucfirst(str_replace(['_', '-'], ' ', $username)), // Convert username to readable name
+        //     'phone' => null,
+        //     'created_at' => date('Y-m-d H:i:s')
+        // ];
         
-        $this->db->insert('users', $user_data);
+        // $this->db->insert('users', $user_data);
         
-        if ($this->db->affected_rows() > 0) {
-            return $this->get_user_by_username($username); // Return the newly created user
-        }
+        // if ($this->db->affected_rows() > 0) {
+        //     return $this->get_user_by_username($username); // Return the newly created user
+        // }
         
         return false;
     }
@@ -98,9 +98,22 @@ class Gift_model extends CI_Model {
     }
 
     /**
-     * Get all gifts from the database
+     * Check if a booking is expired
      * 
-     * @return array Array of all gifts
+     * @param string $booked_until The booking expiration timestamp
+     * @return bool True if booking is expired, false otherwise
+     */
+    private function is_booking_expired($booked_until) {
+        if (empty($booked_until)) {
+            return false;
+        }
+        return strtotime($booked_until) < time();
+    }
+
+    /**
+     * Get all gifts from the database with automatic expired booking cleanup
+     * 
+     * @return array Array of all gifts with expired bookings automatically cleared
      */
     public function get_all_gifts() {
         $this->db->select('g.*, u.username as booked_by_username, u.name as booked_by_name, pu.username as purchased_by_username, pu.name as purchased_by_name');
@@ -109,11 +122,25 @@ class Gift_model extends CI_Model {
         $this->db->join('users pu', 'pu.id = g.purchased_by_user_id', 'left');
         $this->db->order_by('g.id', 'ASC');
         
-        return $this->db->get()->result_array();
+        $gifts = $this->db->get()->result_array();
+        
+        // Process gifts to handle expired bookings in-memory
+        foreach ($gifts as &$gift) {
+            if ($gift['status'] === 'booked' && $this->is_booking_expired($gift['booked_until'])) {
+                // Clear expired booking data in the returned array
+                $gift['status'] = 'available';
+                $gift['booked_by_user_id'] = null;
+                $gift['booked_until'] = null;
+                $gift['booked_by_username'] = null;
+                $gift['booked_by_name'] = null;
+            }
+        }
+        
+        return $gifts;
     }
 
     /**
-     * Get a single gift by ID
+     * Get a single gift by ID with automatic expired booking cleanup
      * 
      * @param int $gift_id The gift ID
      * @return array|false Gift data array or false if not found
@@ -125,7 +152,18 @@ class Gift_model extends CI_Model {
         $this->db->join('users pu', 'pu.id = g.purchased_by_user_id', 'left');
         $this->db->where('g.id', $gift_id);
         
-        return $this->db->get()->row_array();
+        $gift = $this->db->get()->row_array();
+        
+        // Handle expired booking in-memory
+        if ($gift && $gift['status'] === 'booked' && $this->is_booking_expired($gift['booked_until'])) {
+            $gift['status'] = 'available';
+            $gift['booked_by_user_id'] = null;
+            $gift['booked_until'] = null;
+            $gift['booked_by_username'] = null;
+            $gift['booked_by_name'] = null;
+        }
+        
+        return $gift;
     }
 
     /**
@@ -179,13 +217,30 @@ class Gift_model extends CI_Model {
     }
 
     /**
-     * Book a gift for a user
+     * Book a gift for a user with automatic expired booking handling
      * 
      * @param int $gift_id The gift ID to book
      * @param int $user_id The user ID booking the gift
      * @return bool True on success, false on failure
      */
     public function book_gift($gift_id, $user_id) {
+        // First, check if the gift exists and get its current status
+        $current_gift = $this->db->where('id', $gift_id)->get('gifts')->row_array();
+        
+        if (!$current_gift) {
+            return false; // Gift doesn't exist
+        }
+        
+        // If gift is booked but expired, clear the expired booking first
+        if ($current_gift['status'] === 'booked' && $this->is_booking_expired($current_gift['booked_until'])) {
+            $this->db->where('id', $gift_id);
+            $this->db->update('gifts', [
+                'status' => 'available',
+                'booked_by_user_id' => null,
+                'booked_until' => null
+            ]);
+        }
+        
         // Set booking expiry to 15 minutes from now
         $booked_until = date('Y-m-d H:i:s', time() + (15 * 60));
         

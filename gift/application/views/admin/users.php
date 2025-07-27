@@ -1,42 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users Management - Digiland Wedding Registry</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: #F9F8F6;
-        }
-        h1, h2, h3, .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
-    </style>
-</head>
-<body class="text-gray-800">
 
-    <!-- Navigation -->
-    <nav class="bg-amber-800 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <h1 class="text-xl font-serif font-bold">Digiland Admin</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="<?php echo base_url('admin'); ?>" class="hover:text-amber-200">Dashboard</a>
-                    <a href="<?php echo base_url('admin/users'); ?>" class="hover:text-amber-200">Users</a>
-                    <a href="<?php echo base_url('admin/gifts'); ?>" class="hover:text-amber-200">Gifts</a>
-                    <a href="<?php echo base_url('admin/logout'); ?>" class="hover:text-amber-200">Logout</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -61,6 +23,11 @@
                     Users Management
                 </h2>
             </div>
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <a href="<?php echo base_url('admin/users/add'); ?>" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-800 hover:bg-amber-900">
+                    <i class="fas fa-plus mr-2"></i> Add New User
+                </a>
+            </div>
         </div>
 
         <!-- Users Table -->
@@ -77,6 +44,8 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registry URL</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Show Gift</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -104,6 +73,12 @@
                                 <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-amber-600 hover:text-amber-900">
                                     <?php echo base_url($user['username']); ?>
                                 </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <?php echo $user['show_gift_section'] ? 'Yes' : 'No'; ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <?php echo $user['difficulty']; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <?php echo date('M j, Y g:i A', strtotime($user['created_at'])); ?>

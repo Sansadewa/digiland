@@ -10,6 +10,7 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `phone` varchar(25) DEFAULT NULL,
   `show_gift_section` BOOLEAN NOT NULL DEFAULT FALSE,
+  `difficulty` TINYINT NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
@@ -61,12 +62,12 @@ CREATE TABLE `admin_users` (
 
 ### Insert Sample Users
 ```sql
-INSERT INTO `users` (`username`, `name`, `phone`, `created_at`) VALUES 
-('john_doe', 'John Doe', '+6281234567890', NOW()),
-('jane_smith', 'Jane Smith', '+6281234567891', NOW()),
-('guest_123', 'Guest User', '+6281234567892', NOW()),
-('family_member', 'Family Member', '+6281234567893', NOW()),
-('friend_001', 'Friend One', '+6281234567894', NOW());
+INSERT INTO `users` (`username`, `name`, `phone`, `show_gift_section`, `difficulty`, `created_at`) VALUES 
+('john_doe', 'John Doe', '+6281234567890', 0, 1, NOW()),
+('jane_smith', 'Jane Smith', '+6281234567891', 0, 1, NOW()),
+('guest_123', 'Guest User', '+6281234567892', 0, 1, NOW()),
+('family_member', 'Family Member', '+6281234567893', 0, 1, NOW()),
+('friend_001', 'Friend One', '+6281234567894', 0, 1, NOW());
 ```
 
 ### Insert Sample Gifts

@@ -53,6 +53,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // Default controller - redirect to a default username or show instructions
 $route['default_controller'] = 'gift/index';
 
+// Assets route
+$route['assets/(:any)'] = 'assets/$1';
+
 // 404 override
 $route['404_override'] = 'gift/not_found';
 
@@ -64,6 +67,7 @@ $route['admin'] = 'admin/index';
 $route['admin/login'] = 'admin/login';
 $route['admin/logout'] = 'admin/logout';
 $route['admin/users'] = 'admin/users';
+$route['admin/users/add'] = 'admin/add_user';
 $route['admin/users/edit/(:num)'] = 'admin/edit_user/$1';
 $route['admin/users/delete/(:num)'] = 'admin/delete_user/$1';
 $route['admin/gifts'] = 'admin/gifts';

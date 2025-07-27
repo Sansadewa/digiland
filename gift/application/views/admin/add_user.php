@@ -6,7 +6,7 @@
         <div class="md:flex md:items-center md:justify-between mb-6">
             <div class="flex-1 min-w-0">
                 <h2 class="text-2xl font-serif font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                    Edit User
+                    Add New User
                 </h2>
             </div>
             <div class="mt-4 flex md:mt-0 md:ml-4">
@@ -21,49 +21,35 @@
             <form method="POST" class="space-y-6 p-6">
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" value="<?php echo $user['username']; ?>" disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500">
-                    <p class="mt-1 text-sm text-gray-500">Username cannot be changed</p>
+                    <input type="text" id="username" name="username" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
                 </div>
 
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="text" id="name" name="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
                 </div>
 
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" value="<?php echo $user['phone']; ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800" placeholder="+6281234567890">
+                    <input type="tel" id="phone" name="phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800" placeholder="+6281234567890">
                 </div>
 
                 <div>
                     <label for="show_gift_section" class="block text-sm font-medium text-gray-700">Show Gift Section</label>
-                    <input type="checkbox" id="show_gift_section" name="show_gift_section" value="1" <?php echo $user['show_gift_section'] ? 'checked' : ''; ?>>
+                    <input type="checkbox" id="show_gift_section" name="show_gift_section" value="1">
                 </div>
 
                 <div>
                     <label for="difficulty" class="block text-sm font-medium text-gray-700">Difficulty</label>
-                    <input type="number" id="difficulty" name="difficulty" value="<?php echo $user['difficulty']; ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="number" id="difficulty" name="difficulty" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
                 </div>  
-
-                <div>
-                    <label for="registry_url" class="block text-sm font-medium text-gray-700">Registry URL</label>
-                    <input type="text" id="registry_url" value="<?php echo base_url($user['username']); ?>" disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500">
-                    <p class="mt-1 text-sm text-gray-500">
-                        <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-amber-600 hover:text-amber-900">View Registry →</a>
-                    </p>
-                </div>
-
-                <div>
-                    <label for="created_at" class="block text-sm font-medium text-gray-700">Joined Date</label>
-                    <input type="text" id="created_at" value="<?php echo date('M j, Y g:i A', strtotime($user['created_at'])); ?>" disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500">
-                </div>
 
                 <div class="flex justify-end space-x-3">
                     <a href="<?php echo base_url('admin/users'); ?>" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                         Cancel
                     </a>
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-800 hover:bg-amber-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-800">
-                        Update User
+                        Submit User
                     </button>
                 </div>
             </form>

@@ -37,7 +37,7 @@ class Gift extends CI_Controller {
         // Get or create user by username
         $user = $this->gift_model->get_user_by_username($username);
         if (!$user) {
-            show_404();
+            $this->show_missing_page();
             return;
         }
         
@@ -59,8 +59,17 @@ class Gift extends CI_Controller {
      * Welcome page when no username is provided
      */
     private function show_welcome_page() {
-        $data['title'] = 'Welcome to Digiland Wedding Registry';
-        $data['message'] = 'Please visit your personalized registry link to view and book gifts.';
+        $data['title'] = 'Selamat Datang di Digiland Wedding Registry';
+        $data['message'] = 'Silahkan gunakan link dari undangan digital untuk mengakses registry. Terima kasih!';
+        $this->load->view('welcome', $data);
+    }
+
+    /**
+     * Missing page when  username is not found
+     */
+    private function show_missing_page() {
+        $data['title'] = 'Wah! Username kamu tidak ditemukan!';
+        $data['message'] = 'Silahkan gunakan link dari undangan digital untuk mengakses registry.';
         $this->load->view('welcome', $data);
     }
 
@@ -69,7 +78,7 @@ class Gift extends CI_Controller {
      */
     public function not_found() {
         $this->output->set_status_header(404);
-        $data['title'] = 'Page Not Found';
+        $data['title'] = '404 Page Not Found';
         $data['message'] = 'The page you are looking for could not be found.';
         $this->load->view('welcome', $data);
     }

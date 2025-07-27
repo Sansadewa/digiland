@@ -31,7 +31,7 @@ class Admin extends CI_Controller {
         $data['stats'] = $this->gift_model->get_statistics();
         $data['recent_users'] = $this->gift_model->get_all_users();
         $data['recent_gifts'] = $this->gift_model->get_all_gifts();
-        
+        $this->load->view('admin/header');
         $this->load->view('admin/dashboard', $data);
     }
 
@@ -53,7 +53,6 @@ class Admin extends CI_Controller {
                 $data['error'] = 'Invalid username or password';
             }
         }
-        
         $this->load->view('admin/login');
     }
 
@@ -71,7 +70,54 @@ class Admin extends CI_Controller {
      */
     public function users() {
         $data['users'] = $this->gift_model->get_all_users();
+        $this->load->view('admin/header');
         $this->load->view('admin/users', $data);
+    }
+
+    /**
+     * Add User
+     */
+    public function add_user() {
+        if ($this->input->post()) {
+            $username = $this->input->post('username');
+            
+            // Check if username already exists
+            $existing_user = $this->gift_model->get_user_by_username($username);
+
+            
+            if ($existing_user) {
+                $this->session->set_flashdata('error', 'Username ' . $username . ' already exists');
+                redirect('admin/users');
+            }
+            
+            //check if username uses preserved routes or method
+            $reserved_routes = ['admin', 'login', 'logout', 'users', 'add_user', 'edit_user', 'delete_user', 'gifts', 'add_gift', 'edit_gift', 'delete_gift', 'reset_gift'];
+            if (in_array($username, $reserved_routes)) {
+                $this->session->set_flashdata('error', 'Username ' . $username . ' is reserved');
+                redirect('admin/users');
+            }
+
+            $user_data = [
+                'username' => $username,
+                'name' => $this->input->post('name'),
+                'phone' => $this->input->post('phone'),
+                'show_gift_section' => $this->input->post('show_gift_section'),
+                'difficulty' => $this->input->post('difficulty'),
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+            
+            // Use the database insert directly since get_user_by_username creates users
+            $this->db->insert('users', $user_data);
+            
+            if ($this->db->affected_rows() > 0) {
+                $this->session->set_flashdata('success', 'User added successfully');
+            } else {
+                $this->session->set_flashdata('error', 'Failed to add user');
+            }
+            redirect('admin/users');
+        }
+        $this->load->view('admin/header');
+        $this->load->view('admin/add_user');
     }
 
     /**
@@ -85,7 +131,9 @@ class Admin extends CI_Controller {
         if ($this->input->post()) {
             $user_data = [
                 'name' => $this->input->post('name'),
-                'phone' => $this->input->post('phone')
+                'phone' => $this->input->post('phone'),
+                'show_gift_section' => $this->input->post('show_gift_section'),
+                'difficulty' => $this->input->post('difficulty')
             ];
             
             if ($this->gift_model->update_user($user_id, $user_data)) {
@@ -100,7 +148,7 @@ class Admin extends CI_Controller {
         if (!$data['user']) {
             redirect('admin/users');
         }
-
+        $this->load->view('admin/header');
         $this->load->view('admin/edit_user', $data);
     }
 
@@ -125,6 +173,7 @@ class Admin extends CI_Controller {
      */
     public function gifts() {
         $data['gifts'] = $this->gift_model->get_all_gifts();
+        $this->load->view('admin/header');
         $this->load->view('admin/gifts', $data);
     }
 
@@ -150,7 +199,7 @@ class Admin extends CI_Controller {
             }
             redirect('admin/gifts');
         }
-
+        $this->load->view('admin/header');
         $this->load->view('admin/add_gift');
     }
 
@@ -179,12 +228,11 @@ class Admin extends CI_Controller {
             }
             redirect('admin/gifts');
         }
-
         $data['gift'] = $this->gift_model->get_gift($gift_id);
         if (!$data['gift']) {
             redirect('admin/gifts');
         }
-
+        $this->load->view('admin/header');
         $this->load->view('admin/edit_gift', $data);
     }
 
