@@ -29,7 +29,7 @@ CREATE TABLE `gifts` (
   `category` varchar(100) DEFAULT NULL,
   `status` enum('available','booked','purchased') NOT NULL DEFAULT 'available',
   `booked_by_user_id` int(11) DEFAULT NULL,
-  `booked_until` datetime DEFAULT NULL,
+  `booked_until` VARCHAR(40) DEFAULT NULL,
   `purchased_by_user_id` int(11) DEFAULT NULL,
   `order_number` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,

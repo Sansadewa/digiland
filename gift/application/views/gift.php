@@ -360,7 +360,7 @@
                         showBookingModal(giftId);
                     }
                 } else if (action === 'manage') {
-                    showPostBookingModal(gift);
+                    showPostBookingModal(giftId);
                 }
             };
 

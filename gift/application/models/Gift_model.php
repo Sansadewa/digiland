@@ -241,13 +241,23 @@ class Gift_model extends CI_Model {
             ]);
         }
         
-        // Set booking expiry to 15 minutes from now
-        $booked_until = date('Y-m-d H:i:s', time() + (15 * 60));
+        // Old code:
+        // $booked_until = date('Y-m-d H:i:s', time() + (15 * 60));
+
+        // New, correct code:
+        // 1. Create a new DateTime object, explicitly setting its timezone to UTC.
+        $booked_until = new DateTime('now', new DateTimeZone('UTC'));
+
+        // 2. Add 15 minutes to it.
+        $booked_until->add(new DateInterval('PT15M'));
+
+        // 3. Format it as an ISO 8601 string to be saved/sent to the browser.
+        $booked_until_string = $booked_until->format('Y-m-d\TH:i:s\Z');
         
         $data = [
             'status' => 'booked',
             'booked_by_user_id' => $user_id,
-            'booked_until' => $booked_until
+            'booked_until' => $booked_until_string
         ];
         
         $this->db->where('id', $gift_id);
