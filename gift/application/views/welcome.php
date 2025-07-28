@@ -52,10 +52,10 @@
                     <p class="text-lg text-gray-600 mb-8 leading-relaxed"><?php echo $message; ?></p>
                 <?php endif; ?>
 
-                <div class="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-8">
-                    <h3 class="text-xl font-serif text-amber-800 mb-4">How to Access Your Registry</h3>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-6 mb-8">
+                    <h3 class="text-xl font-serif text-emerald-800 mb-4">How to Access Your Registry</h3>
                     <p class="text-gray-700 mb-4">To view your personalized wedding registry, please use the link that was sent to you. The link should look like:</p>
-                    <div class="bg-white border border-amber-300 rounded-md p-3 font-mono text-sm text-amber-800">
+                    <div class="bg-white border border-emerald-300 rounded-md p-3 font-mono text-sm text-emerald-800">
                         gift.digiland.space/your-username
                     </div>
                 </div>

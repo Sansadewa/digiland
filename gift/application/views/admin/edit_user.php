@@ -27,12 +27,12 @@
 
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
 
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" value="<?php echo $user['phone']; ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800" placeholder="+6281234567890">
+                    <input type="tel" id="phone" name="phone" value="<?php echo $user['phone']; ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800" placeholder="+6281234567890">
                 </div>
 
                 <div>
@@ -42,14 +42,14 @@
 
                 <div>
                     <label for="difficulty" class="block text-sm font-medium text-gray-700">Difficulty</label>
-                    <input type="number" id="difficulty" name="difficulty" value="<?php echo $user['difficulty']; ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="number" id="difficulty" name="difficulty" value="<?php echo $user['difficulty']; ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                 </div>  
 
                 <div>
                     <label for="registry_url" class="block text-sm font-medium text-gray-700">Registry URL</label>
                     <input type="text" id="registry_url" value="<?php echo base_url($user['username']); ?>" disabled class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500">
                     <p class="mt-1 text-sm text-gray-500">
-                        <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-amber-600 hover:text-amber-900">View Registry →</a>
+                        <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-emerald-600 hover:text-emerald-900">View Registry →</a>
                     </p>
                 </div>
 
@@ -62,7 +62,7 @@
                     <a href="<?php echo base_url('admin/users'); ?>" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                         Cancel
                     </a>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-800 hover:bg-amber-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-800">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-800 hover:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-800">
                         Update User
                     </button>
                 </div>

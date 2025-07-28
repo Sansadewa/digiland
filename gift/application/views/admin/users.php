@@ -24,7 +24,7 @@
                 </h2>
             </div>
             <div class="mt-4 flex md:mt-0 md:ml-4">
-                <a href="<?php echo base_url('admin/users/add'); ?>" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-800 hover:bg-amber-900">
+                <a href="<?php echo base_url('admin/users/add'); ?>" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-800 hover:bg-emerald-900">
                     <i class="fas fa-plus mr-2"></i> Add New User
                 </a>
             </div>
@@ -56,8 +56,8 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <div class="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
-                                            <span class="text-amber-800 font-medium"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></span>
+                                        <div class="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                                            <span class="text-emerald-800 font-medium"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></span>
                                         </div>
                                     </div>
                                     <div class="ml-4">
@@ -70,7 +70,7 @@
                                 <?php echo $user['phone'] ?: 'N/A'; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-amber-600 hover:text-amber-900">
+                                <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-emerald-600 hover:text-emerald-900">
                                     <?php echo base_url($user['username']); ?>
                                 </a>
                             </td>
@@ -84,7 +84,7 @@
                                 <?php echo date('M j, Y g:i A', strtotime($user['created_at'])); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="<?php echo base_url('admin/users/edit/' . $user['id']); ?>" class="text-amber-600 hover:text-amber-900 mr-3">
+                                <a href="<?php echo base_url('admin/users/edit/' . $user['id']); ?>" class="text-emerald-600 hover:text-emerald-900 mr-3">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                                 <a href="<?php echo base_url('admin/users/delete/' . $user['id']); ?>" 

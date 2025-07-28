@@ -23,17 +23,17 @@
 <body class="text-gray-800">
 
     <!-- Navigation -->
-    <nav class="bg-amber-800 text-white shadow-lg">
+    <nav class="bg-emerald-800 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <h1 class="text-xl font-serif font-bold">Digiland Admin</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="<?php echo base_url('admin'); ?>" class="hover:text-amber-200">Dashboard</a>
-                    <a href="<?php echo base_url('admin/users'); ?>" class="hover:text-amber-200">Users</a>
-                    <a href="<?php echo base_url('admin/gifts'); ?>" class="hover:text-amber-200">Gifts</a>
-                    <a href="<?php echo base_url('admin/logout'); ?>" class="hover:text-amber-200">Logout</a>
+                    <a href="<?php echo base_url('admin'); ?>" class="hover:text-emerald-200">Dashboard</a>
+                    <a href="<?php echo base_url('admin/users'); ?>" class="hover:text-emerald-200">Users</a>
+                    <a href="<?php echo base_url('admin/gifts'); ?>" class="hover:text-emerald-200">Gifts</a>
+                    <a href="<?php echo base_url('admin/logout'); ?>" class="hover:text-emerald-200">Logout</a>
                 </div>
             </div>
         </div>

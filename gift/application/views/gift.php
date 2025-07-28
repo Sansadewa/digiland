@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" href="<?php echo base_url('assets/Digiland.svg'); ?>" sizes="any" type="image/svg+xml" />
@@ -20,13 +21,16 @@
             font-family: 'Playfair Display', serif;
         }
         .hero-bg {
-            background-image: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080&auto=format&fit=crop');
+            background-image: url('assets/candyland.webp');
             background-size: cover;
             background-position: center;
         }
+        .title{
+            font-family: 'Yellowtail', cursive;
+        }
         .tab-active {
-            border-bottom: 2px solid #A0522D;
-            color: #A0522D;
+            border-bottom: 2px solid #065F46;
+            color: #065F46;
             font-weight: bold;
         }
         .product-card {
@@ -58,12 +62,12 @@
             transition: opacity 0.3s ease-in-out;
         }
         .view-btn.active {
-            color: #A0522D;
+            color: #065F46;
             background-color: #F3E5D8;
         }
         .loader {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #A0522D;
+            border-top: 4px solid #065F46;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -96,10 +100,10 @@
         <!-- Header, Tabs, etc. -->
         <header class="text-center mb-12">
             <div class="hero-bg h-64 md:h-80 rounded-lg flex items-center justify-center text-white shadow-lg">
-                <div class="bg-black bg-opacity-40 p-6 rounded-lg">
-                    <h1 class="text-4xl md:text-6xl font-bold">DIGILAND</h1>
+                <div class="bg-emerald-800 bg-opacity-50 p-6 rounded-lg">
+                    <h1 class="text-5xl md:text-7xl font-bold title">&nbsp;&nbsp;&nbsp;Digiland&nbsp;&nbsp;&nbsp;</h1>
                     <p class="mt-2 text-lg md:text-xl tracking-widest">WEDDING REGISTRY</p>
-                    <p class="mt-4 text-md md:text-lg bg-white bg-opacity-20 inline-block px-4 py-1 rounded-full">
+                    <p class="mt-4 text-md md:text-lg bg-emerald-800 bg-opacity-90  inline-block px-4 py-1 rounded-full">
                         Minggu, 07 September 2025
                     </p>
                 </div>
@@ -121,13 +125,13 @@
                     Dearest friends and family, thank you so much for visiting our wedding registry. Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have put together a list of items we would love to have as we begin our new life together. We are so excited to celebrate our special day with you!
                 </p>
                 <p class="mt-4 text-lg text-gray-600">With love,</p>
-                <p class="mt-2 text-2xl font-serif text-gray-700">Gibran & Diyang</p>
+                <p class=" text-3xl  text-emerald-700 title">Gibran & Diyang</p>
             </section>
 
             <section id="gift-list">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                     <div class="flex flex-wrap justify-center gap-2" id="filters">
-                        <button data-filter="all" class="filter-btn bg-amber-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow">All Gifts</button>
+                        <button data-filter="all" class="filter-btn bg-emerald-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow">All Gifts</button>
                         <button data-filter="Home" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Home</button>
                         <button data-filter="Kitchen" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Kitchen</button>
                         <button data-filter="Electronics" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Electronics</button>
@@ -135,7 +139,7 @@
                     <div class="flex items-center gap-4">
                         <div class="flex items-center gap-2">
                            <label for="sort" class="text-sm font-medium text-gray-600">Sort by:</label>
-                           <select id="sort" class="border border-gray-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-800">
+                           <select id="sort" class="border border-gray-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800">
                                <option value="name-asc">Name: A-Z</option>
                                <option value="name-desc">Name: Z-A</option>
                                <option value="price-asc">Price: Low to High</option>
@@ -313,7 +317,7 @@
 
                 switch(gift.status) {
                     case 'available':
-                        buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Book this Gift</button>`;
+                        buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Book this Gift</button>`;
                         break;
                     case 'booked':
                         statusClass = 'is-booked';
@@ -322,7 +326,7 @@
                             overlayHtml = `<div class="status-overlay" data-id="${gift.id}" data-action="manage"><div class="bg-green-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">You Booked This</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
                         } else {
                             buttonHtml = `<button disabled class="w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed">Booked</button>`;
-                            overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-amber-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Booked by Other</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
+                            overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-emerald-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Booked by Other</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
                         }
                         break;
                     case 'purchased':
@@ -337,10 +341,10 @@
 
                 if (currentView === 'grid') {
                     card.classList.add('flex', 'flex-col');
-                    card.innerHTML = `<div class="relative pb-[100%]"><img src="${gift.image_url}" alt="${gift.name}" class="absolute h-full w-full object-cover"></div><div class="p-4 flex flex-col flex-grow"><h3 class="font-semibold text-gray-800 flex-grow">${gift.name}</h3><p class="text-lg font-bold text-amber-800 mt-2">${formatter.format(gift.price)}</p><div class="mt-4">${buttonHtml}</div></div>${overlayHtml}`;
+                    card.innerHTML = `<div class="relative pb-[100%]"><img src="${gift.image_url}" alt="${gift.name}" class="absolute h-full w-full object-cover"></div><div class="p-4 flex flex-col flex-grow"><h3 class="font-semibold text-gray-800 flex-grow">${gift.name}</h3><p class="text-lg font-bold text-orange-800 mt-2">${formatter.format(gift.price)}</p><div class="mt-4">${buttonHtml}</div></div>${overlayHtml}`;
                 } else {
                     card.classList.add('flex', 'items-center', 'p-4');
-                    card.innerHTML = `<img src="${gift.image_url}" alt="${gift.name}" class="w-20 h-20 object-cover rounded-md mr-4"><div class="flex-grow"><h3 class="font-semibold text-gray-800">${gift.name}</h3><p class="text-md font-bold text-amber-800">${formatter.format(gift.price)}</p></div><div class="w-40 ml-4">${buttonHtml}</div>${overlayHtml}`;
+                    card.innerHTML = `<img src="${gift.image_url}" alt="${gift.name}" class="w-20 h-20 object-cover rounded-md mr-4"><div class="flex-grow"><h3 class="font-semibold text-gray-800">${gift.name}</h3><p class="text-md font-bold text-orange-800">${formatter.format(gift.price)}</p></div><div class="w-40 ml-4">${buttonHtml}</div>${overlayHtml}`;
                 }
                 return card;
             };
@@ -381,7 +385,7 @@
                                 <img src="${giftDetails.image_url}" class="w-full md:w-1/3 h-auto object-cover rounded-lg">
                                 <div class="flex-grow">
                                     <h4 class="text-xl font-bold">${giftDetails.name}</h4>
-                                    <p class="text-2xl font-bold text-amber-800 my-2">${formatter.format(giftDetails.price)}</p>
+                                    <p class="text-2xl font-bold text-emerald-800 my-2">${formatter.format(giftDetails.price)}</p>
                                     <p class="text-gray-600 text-sm leading-relaxed">${giftDetails.description}</p>
                                 </div>
                             </div>
@@ -433,10 +437,10 @@
                     <div class="p-6 text-center">
                         <h3 class="text-2xl font-serif mb-2 text-green-600">Gift Booked!</h3>
                         <p class="text-gray-600 mb-4">This item is reserved for you. Please complete the purchase and enter the Order Number below.</p>
-                        <div class="text-4xl font-bold text-amber-800 my-4" id="modal-countdown"></div>
+                        <div class="text-4xl font-bold text-emerald-800 my-4" id="modal-countdown"></div>
                         <div class="my-4">
                             <label for="order-number" class="block text-sm font-medium text-gray-700 text-left">Order Number (Required)</label>
-                            <input type="text" id="order-number" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-800 focus:border-amber-800 sm:text-sm" placeholder="e.g., INV/2025/03/XYZ">
+                            <input type="text" id="order-number" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-800 focus:border-emerald-800 sm:text-sm" placeholder="e.g., INV/2025/03/XYZ">
                         </div>
                         <button id="confirm-purchase" data-id="${gift.id}" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg opacity-50 cursor-not-allowed" disabled>I've Purchased It!</button>
                         <button id="cancel-booking" data-id="${gift.id}" class="mt-2 text-sm text-gray-500 hover:underline">Cancel my booking</button>
@@ -506,7 +510,7 @@
                         <i class="fas fa-heart text-4xl text-red-500 mb-4"></i>
                         <h3 class="text-3xl font-serif mb-2">Thank You!</h3>
                         <p class="text-gray-600 mb-6">Your generous gift of the <strong>${gift.name}</strong> is deeply appreciated. Anindia and Mustofiq are so grateful for your kindness.</p>
-                        <button id="close-thankyou-modal" class="px-8 py-2 bg-amber-800 text-white rounded-lg hover:bg-amber-900 font-semibold">Close</button>
+                        <button id="close-thankyou-modal" class="px-8 py-2 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 font-semibold">Close</button>
                     </div>
                 `;
                 document.getElementById('close-modal-btn').addEventListener('click', hideModal);
@@ -520,7 +524,7 @@
                     <div class="p-6 text-center">
                         <h3 class="text-2xl font-serif mb-2">${title}</h3>
                         <p class="text-gray-600 mb-6">${message}</p>
-                        <button id="close-info-modal" class="px-6 py-2 bg-amber-800 text-white rounded-lg hover:bg-amber-900 font-semibold">OK</button>
+                        <button id="close-info-modal" class="px-6 py-2 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 font-semibold">OK</button>
                     </div>
                 `;
                 document.getElementById('close-modal-btn').addEventListener('click', hideModal);
@@ -580,9 +584,9 @@
             document.getElementById('filters').addEventListener('click', (e) => {
                 if (e.target.tagName !== 'BUTTON') return;
                 currentFilter = e.target.dataset.filter;
-                document.querySelector('#filters .bg-amber-800').classList.replace('bg-amber-800', 'bg-white');
+                document.querySelector('#filters .bg-emerald-800').classList.replace('bg-emerald-800', 'bg-white');
                 document.querySelector('#filters .text-white').classList.replace('text-white', 'text-gray-700');
-                e.target.classList.add('bg-amber-800', 'text-white');
+                e.target.classList.add('bg-emerald-800', 'text-white');
                 renderGifts();
             });
             document.getElementById('sort').addEventListener('change', (e) => { currentSort = e.target.value; renderGifts(); });

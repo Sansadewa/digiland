@@ -135,7 +135,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        <a href="<?php echo base_url('admin/users'); ?>" class="text-amber-800 hover:text-amber-900 text-sm font-medium">View all users →</a>
+                        <a href="<?php echo base_url('admin/users'); ?>" class="text-emerald-800 hover:text-emerald-900 text-sm font-medium">View all users →</a>
                     </div>
                 </div>
             </div>
@@ -194,7 +194,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        <a href="<?php echo base_url('admin/gifts'); ?>" class="text-amber-800 hover:text-amber-900 text-sm font-medium">View all gifts →</a>
+                        <a href="<?php echo base_url('admin/gifts'); ?>" class="text-emerald-800 hover:text-emerald-900 text-sm font-medium">View all gifts →</a>
                     </div>
                 </div>
             </div>

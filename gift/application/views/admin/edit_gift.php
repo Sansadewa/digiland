@@ -52,12 +52,12 @@
             <form method="POST" class="space-y-6 p-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Gift Name *</label>
-                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($gift['name']); ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($gift['name']); ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                 </div>
 
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea id="description" name="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800"><?php echo htmlspecialchars($gift['description']); ?></textarea>
+                    <textarea id="description" name="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800"><?php echo htmlspecialchars($gift['description']); ?></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -67,13 +67,13 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <span class="text-gray-500 sm:text-sm">Rp</span>
                             </div>
-                            <input type="number" id="price" name="price" value="<?php echo $gift['price']; ?>" required min="0" step="100" class="pl-10 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                            <input type="number" id="price" name="price" value="<?php echo $gift['price']; ?>" required min="0" step="100" class="pl-10 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                         </div>
                     </div>
 
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                        <select id="category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                        <select id="category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                             <option value="">Select Category</option>
                             <option value="Kitchen" <?php echo ($gift['category'] === 'Kitchen') ? 'selected' : ''; ?>>Kitchen</option>
                             <option value="Home Decor" <?php echo ($gift['category'] === 'Home Decor') ? 'selected' : ''; ?>>Home Decor</option>
@@ -89,13 +89,13 @@
 
                 <div>
                     <label for="image_url" class="block text-sm font-medium text-gray-700">Image URL *</label>
-                    <input type="url" id="image_url" name="image_url" value="<?php echo htmlspecialchars($gift['image_url']); ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="url" id="image_url" name="image_url" value="<?php echo htmlspecialchars($gift['image_url']); ?>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                     <p class="mt-1 text-sm text-gray-500">Enter a direct URL to the gift image</p>
                 </div>
 
                 <div>
                     <label for="store_url" class="block text-sm font-medium text-gray-700">Store URL</label>
-                    <input type="url" id="store_url" name="store_url" value="<?php echo htmlspecialchars($gift['store_url']); ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-800 focus:border-amber-800">
+                    <input type="url" id="store_url" name="store_url" value="<?php echo htmlspecialchars($gift['store_url']); ?>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-800 focus:border-emerald-800">
                     <p class="mt-1 text-sm text-gray-500">Link to where guests can purchase this gift</p>
                 </div>
 
@@ -113,7 +113,7 @@
                     <a href="<?php echo base_url('admin/gifts'); ?>" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                         Cancel
                     </a>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-800 hover:bg-amber-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-800">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-800 hover:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-800">
                         Update Gift
                     </button>
                 </div>
