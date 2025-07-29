@@ -19,6 +19,9 @@ class Gift extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('gift_model');
+
+
+
     }
 
     /**
@@ -40,6 +43,10 @@ class Gift extends CI_Controller {
             $this->show_missing_page();
             return;
         }
+
+        //destroy session
+        $this->session->unset_userdata('user_id');
+        $this->session->unset_userdata('username');
         
         // Set user session data
         $this->session->set_userdata('user_id', $user['id']);
