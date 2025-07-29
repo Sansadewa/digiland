@@ -112,38 +112,45 @@
 
         <div class="w-full mb-8">
             <nav class="flex justify-center border-b border-gray-300">
-                <button data-tab="welcome" class="tab-btn tab-inactive px-6 py-3 text-lg">Welcome</button>
-                <button data-tab="gift-list" class="tab-btn tab-active px-6 py-3 text-lg">Gift List</button>
-                <button data-tab="shipping" class="tab-btn tab-inactive px-6 py-3 text-lg">Shipping Info</button>
+                <button data-tab="welcome" class="tab-btn tab-active px-6 py-3 text-lg">Welcome</button>
+                <button data-tab="gift-list" class="tab-btn tab-inactive px-6 py-3 text-lg">Gift List</button>
+                <button data-tab="shipping" class="tab-btn tab-inactive px-6 py-3 text-lg">Alamat Pengiriman</button>
             </nav>
         </div>
 
         <main id="tab-content">
-            <section id="welcome" class="hidden text-center p-8 bg-white rounded-lg shadow-md">
-                <h2 class="text-3xl font-serif text-gray-700 mb-4">Welcome to Our Registry!</h2>
+            <section id="welcome" class="text-center p-8 bg-white rounded-lg shadow-md">
+                <h2 class="text-3xl font-serif text-gray-700 mb-4">Syelamat Datang~</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    Dearest friends and family, thank you so much for visiting our wedding registry. Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have put together a list of items we would love to have as we begin our new life together. We are so excited to celebrate our special day with you!
+                    Kedatangan anda pada pernikahan kami merupakah hadiah terbaik untuk kami, namun jika Anda ingin memberikan bingkisan lain, ijinkan kami untuk mengatur bingkisan agar tidak terjadi overlap. Kami sangat menghargai setiap bingkisan yang Anda berikan.
                 </p>
-                <p class="mt-4 text-lg text-gray-600">With love,</p>
+                <p class="mt-2 text-lg text-emerald-700">With love and warmth,</p>
                 <p class=" text-3xl  text-emerald-700 title">Gibran & Diyang</p>
+                
+                <div class="mt-12">
+                    <button data-tab="gift-list" id="show-gift-list" class="bg-emerald-800 hover:bg-emerald-700 text-white px-8 py-3 rounded-full  font-semibold shadow-lg transition-colors duration-200">
+                        Lihat Gift List
+                    </button>
+                </div>
+
             </section>
 
-            <section id="gift-list">
+            <section id="gift-list" class="hidden">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                     <div class="flex flex-wrap justify-center gap-2" id="filters">
-                        <button data-filter="all" class="filter-btn bg-emerald-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow">All Gifts</button>
-                        <button data-filter="Home" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Home</button>
-                        <button data-filter="Kitchen" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Kitchen</button>
-                        <button data-filter="Electronics" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Electronics</button>
+                        <button data-filter="all" class="filter-btn bg-emerald-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow">Semua Hadiah</button>
+                        <button data-filter="Home" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Rumahan</button>
+                        <button data-filter="Kitchen" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Dapur</button>
+                        <button data-filter="Electronics" class="filter-btn bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-semibold shadow">Elektronik</button>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="flex items-center gap-2">
                            <label for="sort" class="text-sm font-medium text-gray-600">Sort by:</label>
                            <select id="sort" class="border border-gray-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-800">
-                               <option value="name-asc">Name: A-Z</option>
-                               <option value="name-desc">Name: Z-A</option>
-                               <option value="price-asc">Price: Low to High</option>
-                               <option value="price-desc">Price: High to Low</option>
+                               <option value="name-asc">Nama: A-Z</option>
+                               <option value="name-desc">Nama: Z-A</option>
+                               <option value="price-asc">Harga: Rendah ke Tinggi</option>
+                               <option value="price-desc">Harga: Tinggi ke Rendah</option>
                            </select>
                         </div>
                         <div class="flex items-center border border-gray-300 rounded-full p-1 bg-white">
@@ -159,16 +166,16 @@
             </section>
             
             <section id="shipping" class="hidden text-center p-8 bg-white rounded-lg shadow-md">
-                <h2 class="text-3xl font-serif text-gray-700 mb-4">Shipping Information</h2>
+                <h2 class="text-3xl font-serif text-gray-700 mb-4">Alamat Pengiriman</h2>
                 <div class="text-lg text-gray-600 max-w-md mx-auto leading-relaxed">
-                    <p class="mb-2">For your convenience, please have all gifts shipped to the following address:</p>
+                    <p class="mb-2">Untuk keamanan, tolong kirimkan semua hadiah ke alamat berikut:</p>
                     <div class="bg-gray-100 p-4 rounded-md border border-gray-200">
                         <p class="font-bold">Gibran & Diyang</p>
                         <p>Jl. Ratu Elok</p>
-                        <p>Jakarta Selatan, 12345</p>
+                        <p>Banjarbaru</p>
                         <p>Indonesia</p>
                     </div>
-                    <p class="mt-4">Thank you for your generosity!</p>
+                    <p class="mt-4">Terima kasih atas kebaikannya :)</p>
                 </div>
             </section>
         </main>
@@ -317,13 +324,13 @@
 
                 switch(gift.status) {
                     case 'available':
-                        buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Book this Gift</button>`;
+                        buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Book Gift ini</button>`;
                         break;
                     case 'booked':
                         statusClass = 'is-booked';
                         if (gift.booked_by_user_id == currentUserId) {
-                            buttonHtml = `<button data-id="${gift.id}" data-action="manage" class="action-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Manage Booking</button>`;
-                            overlayHtml = `<div class="status-overlay" data-id="${gift.id}" data-action="manage"><div class="bg-green-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">You Booked This</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
+                            buttonHtml = `<button data-id="${gift.id}" data-action="manage" class="action-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Lanjutkan Booking</button>`;
+                            overlayHtml = `<div class="status-overlay" data-id="${gift.id}" data-action="manage"><div class="bg-green-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Lanjutkan Booking!</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
                         } else {
                             buttonHtml = `<button disabled class="w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed">Booked</button>`;
                             overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-emerald-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Booked by Other</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
@@ -336,7 +343,7 @@
                         break;
                 }
 
-                card.className = `product-card bg-white rounded-lg shadow-md overflow-hidden relative ${statusClass}`;
+                card.className = `product-card bg-white rounded-lg shadow-md overflow-hidden relative  ${statusClass}`;
                 card.dataset.id = gift.id;
 
                 if (currentView === 'grid') {
@@ -354,12 +361,12 @@
                 const target = e.currentTarget;
                 const giftId = parseInt(target.dataset.id, 10);
                 const action = target.dataset.action;
-                const gift = gifts.find(g => g.id === giftId);
+                const gift = gifts.find(g => g.id == giftId);
                 const userHasActiveBooking = gifts.some(g => g.status === 'booked' && g.booked_by_user_id == currentUserId);
 
                 if (action === 'book') {
                     if (userHasActiveBooking) {
-                        showInfoModal('One Booking at a Time', 'You can only book one gift at a time. Please complete or cancel your current booking before selecting another.');
+                        showInfoModal('Booking', 'Kamu hanya bisa booking satu bingkisan yaa. Selesaikan atau batalkan bookingmu sebelum memilih bingkisan lain.');
                     } else {
                         showBookingModal(giftId);
                     }
@@ -370,7 +377,7 @@
 
             const showBookingModal = async (giftId) => {
                 showModal();
-                modalContent.innerHTML = `<div class="p-8 flex items-center justify-center min-h-[400px]"><div class="loader"></div></div>`;
+                modalContent.innerHTML = `<div class="p-8 flex items-center justify-center min-h-[400px] max-h-[90vh] overflow-y-auto"><div class="loader"></div></div>`;
                 
                 try {
                     const giftDetails = await fetchGiftDetails(giftId);
@@ -380,7 +387,7 @@
                     modalContent.innerHTML = `
                         <button class="modal-close-btn" id="close-modal-btn">&times;</button>
                         <div class="p-6">
-                            <h3 class="text-2xl font-serif mb-4 text-gray-800">Book this Gift</h3>
+                            <h3 class="text-2xl font-serif mb-4 text-gray-800">Booking Bingkisan ini</h3>
                             <div class="flex flex-col md:flex-row gap-6 mb-4">
                                 <img src="${giftDetails.image_url}" class="w-full md:w-1/3 h-auto object-cover rounded-lg">
                                 <div class="flex-grow">
@@ -391,13 +398,13 @@
                             </div>
                             <div class="bg-gray-100 p-4 rounded-lg border mb-4">
                                 <h5 class="font-bold mb-1">Ship To:</h5>
-                                <p class="text-sm text-gray-700">Anindia & Mustofiq, Jl. Bahagia Selalu No. 25, Jakarta Selatan, 12345, Indonesia</p>
+                                <p class="text-sm text-gray-700">Gibran & Diyang, Jl. Ratu Elok, Banjarbaru, Kalimantan Selatan</p>
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between gap-3">
-                                <button onclick="window.open('${giftDetails.store_url}', '_blank')" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex-grow"><i class="fas fa-shopping-cart mr-2"></i>View on Store</button>
+                                <button onclick="window.open('${giftDetails.store_url}', '_blank')" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex-grow"><i class="fas fa-shopping-cart mr-2"></i>Toko Online</button>
                                 <div class="flex gap-3">
                                     <button id="cancel-modal" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold">Cancel</button>
-                                    <button id="confirm-book" data-id="${giftDetails.id}" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold">Confirm & Book</button>
+                                    <button id="confirm-book" data-id="${giftDetails.id}" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold">Booking Gift Ini</button>
                                 </div>
                             </div>
                         </div>`;
@@ -417,8 +424,8 @@
                         // Refresh the gifts list from server
                         await refreshGiftsList();
                         startCountdownTimer();
-                        // Find the updated gift
-                        const gift = gifts.find(g => g.id === giftId);
+                       
+                        const gift = gifts.find(g => g.id == giftId);
                         if (gift) {
                             showPostBookingModal(gift);
                         }
@@ -436,14 +443,14 @@
                     <button class="modal-close-btn" id="close-modal-btn">&times;</button>
                     <div class="p-6 text-center">
                         <h3 class="text-2xl font-serif mb-2 text-green-600">Gift Booked!</h3>
-                        <p class="text-gray-600 mb-4">This item is reserved for you. Please complete the purchase and enter the Order Number below.</p>
+                        <p class="text-gray-600 mb-4">Barang sudah dibooking untuk anda. Silahkan selesaikan melanjutkan konfirmasi dan dengan memasukkan nomor <b>Resi Pengiriman</b> di bawah ini. Ketik "OFFLINE" jika tidak ada resi pengiriman.</p>
                         <div class="text-4xl font-bold text-emerald-800 my-4" id="modal-countdown"></div>
                         <div class="my-4">
-                            <label for="order-number" class="block text-sm font-medium text-gray-700 text-left">Order Number (Required)</label>
-                            <input type="text" id="order-number" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-800 focus:border-emerald-800 sm:text-sm" placeholder="e.g., INV/2025/03/XYZ">
+                            <label for="order-number" class="block text-sm font-medium text-gray-700 text-left">Resi Pengiriman (Required)</label>
+                            <input type="text" id="order-number" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-800 focus:border-emerald-800 sm:text-sm" placeholder="e.g., SPX1234567">
                         </div>
-                        <button id="confirm-purchase" data-id="${gift.id}" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg opacity-50 cursor-not-allowed" disabled>I've Purchased It!</button>
-                        <button id="cancel-booking" data-id="${gift.id}" class="mt-2 text-sm text-gray-500 hover:underline">Cancel my booking</button>
+                        <button id="confirm-purchase" data-id="${gift.id}" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg opacity-50 cursor-not-allowed" disabled>Konfirmasi Pengiriman!</button>
+                        <button id="cancel-booking" data-id="${gift.id}" class="mt-2 text-sm text-gray-500 hover:underline">Cancel Booking Saya</button>
                     </div>`;
 
                 const orderInput = document.getElementById('order-number');
@@ -474,7 +481,7 @@
                         // Refresh the gifts list from server
                         await refreshGiftsList();
                         // Find the updated gift
-                        const gift = gifts.find(g => g.id === giftId);
+                        const gift = gifts.find(g => g.id == giftId);
                         if (gift) {
                             showThankYouModal(gift);
                         }
@@ -509,8 +516,8 @@
                     <div class="p-8 text-center">
                         <i class="fas fa-heart text-4xl text-red-500 mb-4"></i>
                         <h3 class="text-3xl font-serif mb-2">Thank You!</h3>
-                        <p class="text-gray-600 mb-6">Your generous gift of the <strong>${gift.name}</strong> is deeply appreciated. Anindia and Mustofiq are so grateful for your kindness.</p>
-                        <button id="close-thankyou-modal" class="px-8 py-2 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 font-semibold">Close</button>
+                        <p class="text-gray-600 mb-6">Terimakasih atas bingkisannya yaa, kami sangat berterima kasih :D</p>
+                        <button id="close-thankyou-modal" class="px-8 py-2 bg-emerald-800 text-white rounded-lg hover:bg-emerald-900 font-semibold">Tutup</button>
                     </div>
                 `;
                 document.getElementById('close-modal-btn').addEventListener('click', hideModal);
@@ -590,6 +597,7 @@
                 renderGifts();
             });
             document.getElementById('sort').addEventListener('change', (e) => { currentSort = e.target.value; renderGifts(); });
+            document.getElementById('show-gift-list').addEventListener('click', (e) => { document.querySelector('.tab-btn[data-tab="gift-list"]').click(); });
             document.getElementById('grid-view-btn').addEventListener('click', () => { currentView = 'grid'; document.getElementById('grid-view-btn').classList.add('active'); document.getElementById('list-view-btn').classList.remove('active'); renderGifts(); });
             document.getElementById('list-view-btn').addEventListener('click', () => { currentView = 'list'; document.getElementById('list-view-btn').classList.add('active'); document.getElementById('grid-view-btn').classList.remove('active'); renderGifts(); });
             document.querySelector('.flex.justify-center.border-b').addEventListener('click', (e) => {
