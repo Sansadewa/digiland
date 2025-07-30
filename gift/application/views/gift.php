@@ -261,7 +261,7 @@
                 }
                 // Add description if not provided by the server
                 if (!result.data.description) {
-                    result.data.description = `This ${result.data.name} is a fantastic addition to any home. Known for its durability and stylish design, it combines functionality with modern aesthetics. It's perfect for everyday use and for special occasions. We believe this will bring much joy and convenience to the couple's new life together.`;
+                    result.data.description = ``;
                 }
                 return result.data;
             }
