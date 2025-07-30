@@ -207,12 +207,24 @@ class Gift_model extends CI_Model {
      * @return bool True if user has an active booking, false otherwise
      */
     public function check_user_booking($user_id) {
+        // 1. Get the current time and explicitly set it to the UTC timezone.
+        $now_utc = new DateTime('now', new DateTimeZone('UTC'));
+
+        // 2. Format it into the IDENTICAL string format as your column.
+        $now_utc_string = $now_utc->format('Y-m-d\TH:i:s\Z');
+        // This will produce a string like '2025-07-29T13:52:21Z'
+
+        // 3. Now, use THIS string in your query.
         $this->db->where('booked_by_user_id', $user_id);
         $this->db->where('status', 'booked');
-        $this->db->where('booked_until >', date('Y-m-d H:i:s')); // Only count non-expired bookings
+        $this->db->where('booked_until >', $now_utc_string); // Only count non-expired bookings
         
         $count = $this->db->count_all_results('gifts');
         
+        //log process and query for debug
+        log_message('debug', 'check_user_booking query: ' . $this->db->last_query());
+        log_message('debug', 'check_user_booking count: ' . $count.' user_id: '.$user_id);
+
         return $count > 0;
     }
 
@@ -230,6 +242,8 @@ class Gift_model extends CI_Model {
         if (!$current_gift) {
             return false; // Gift doesn't exist
         }
+
+        
         
         // If gift is booked but expired, clear the expired booking first
         if ($current_gift['status'] === 'booked' && $this->is_booking_expired($current_gift['booked_until'])) {
@@ -239,6 +253,11 @@ class Gift_model extends CI_Model {
                 'booked_by_user_id' => null,
                 'booked_until' => null
             ]);
+        }
+
+        //if current gift is not available
+        if ($current_gift['status'] !== 'available') {
+            return false; // Gift is not available
         }
         
         // Old code:

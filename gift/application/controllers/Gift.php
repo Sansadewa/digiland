@@ -44,13 +44,19 @@ class Gift extends CI_Controller {
             return;
         }
 
+        //debug before sess destroy
+        log_message('debug', 'index() before destroy session - User ID: ' . $user['id']);
+
         //destroy session
-        $this->session->unset_userdata('user_id');
-        $this->session->unset_userdata('username');
+        // session_destroy();
         
         // Set user session data
         $this->session->set_userdata('user_id', $user['id']);
         $this->session->set_userdata('username', $username);
+        $this->session->set_userdata('nama', $user['name']);
+
+        //debug after sess destroy
+        log_message('debug', 'index() after destroy session - User ID: ' . $user['id']);
 
         // Get all gifts from database
         $gifts = $this->gift_model->get_all_gifts();
@@ -58,6 +64,7 @@ class Gift extends CI_Controller {
         // Pass the initial gift data to the view
         $data['initial_gifts_json'] = json_encode($gifts);
         $data['username'] = $username;
+        $data['nama'] = $user['name'];
 
         $this->load->view('gift', $data); 
     }
@@ -118,8 +125,16 @@ class Gift extends CI_Controller {
      */
     public function book() {
         $userId = $this->session->userdata('user_id');
+        //debug user id
+        log_message('debug', 'book() - User ID: ' . $this->session->userdata('user_id'));
+
+        //debug last connection
+        log_message('debug', 'book() - Last connection: ' . $this->session->userdata('last_connection'));
         if (!$userId) {
-            return $this->output->set_status_header(401)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'Unauthorized. Please log in.']));
+            //debug all userdata
+            log_message('debug', 'book() - User ID not found in session: ' . print_r($this->session->all_userdata(), true));
+
+            return $this->output->set_status_header(401)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'Unauthorized User ID. Please log in.'.$userId]));
         }
 
         $data = json_decode($this->input->raw_input_stream, true);
@@ -128,15 +143,15 @@ class Gift extends CI_Controller {
         // Server-Side Validation
         // 1. Check if user already has a booking
         if ($this->gift_model->check_user_booking($userId)) {
-            return $this->output->set_status_header(409)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'You already have an active booking.']));
+            return $this->output->set_status_header(409)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'You already have an active booking.'.$userId]));
         }
 
         // 2. Check if gift is available and book it
         if (!$this->gift_model->book_gift($giftId, $userId)) {
-            return $this->output->set_status_header(409)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'This gift is no longer available.']));
+            return $this->output->set_status_header(409)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'Bingkisan Tidak Tersedia. Mohon refresh.']));
         }
 
-        return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode(['success' => true, 'message' => 'Gift booked successfully.']));
+        return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode(['success' => true, 'message' => 'Bingkisan berhasil di booking.']));
     }
 
     /**

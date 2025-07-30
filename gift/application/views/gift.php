@@ -52,6 +52,13 @@
             transition: opacity 0.3s ease;
             pointer-events: none;
         }
+
+        .is-booked {
+            opacity: 1;
+            /*set pointer to click icon*/
+            cursor: pointer;
+        }
+
         .product-card.is-purchased .status-overlay,
         .product-card.is-booked .status-overlay {
             opacity: 1;
@@ -120,7 +127,7 @@
 
         <main id="tab-content">
             <section id="welcome" class="text-center p-8 bg-white rounded-lg shadow-md">
-                <h2 class="text-3xl font-serif text-gray-700 mb-4">Syelamat Datang~</h2>
+                <h2 class="text-3xl font-serif text-gray-700 mb-4">Syelamat Datang <?php echo $nama; ?>~</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
                     Kedatangan anda pada pernikahan kami merupakah hadiah terbaik untuk kami, namun jika Anda ingin memberikan bingkisan lain, ijinkan kami untuk mengatur bingkisan agar tidak terjadi overlap. Kami sangat menghargai setiap bingkisan yang Anda berikan.
                 </p>
@@ -181,6 +188,29 @@
         </main>
 
     </div>
+
+    <!-- Back to top button -->
+    <button
+    type="button"
+    data-twe-ripple-init
+    data-twe-ripple-color="light"
+    class="!fixed bottom-5 end-5 hidden rounded-full bg-emerald-800 p-3 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-emerald-700 hover:shadow-lg focus:bg-emerald-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-emerald-800 active:shadow-lg"
+    id="btn-back-to-top">
+    <span class="[&>svg]:w-4">
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="3"
+        stroke="currentColor">
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+        </svg>
+    </span>
+    </button>
+
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
@@ -324,22 +354,22 @@
 
                 switch(gift.status) {
                     case 'available':
-                        buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Book Gift ini</button>`;
+                        buttonHtml = `<button data-id="${gift.id}" data-action="book" class="action-btn w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2 px-4 rounded-lg transition-colors">Lihat Detil</button>`;
                         break;
                     case 'booked':
                         statusClass = 'is-booked';
                         if (gift.booked_by_user_id == currentUserId) {
-                            buttonHtml = `<button data-id="${gift.id}" data-action="manage" class="action-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Lanjutkan Booking</button>`;
+                            buttonHtml = `<button data-id="${gift.id}" data-action="manage" class="action-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors is-booked">Lanjutkan Booking</button>`;
                             overlayHtml = `<div class="status-overlay" data-id="${gift.id}" data-action="manage"><div class="bg-green-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Lanjutkan Booking!</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
                         } else {
                             buttonHtml = `<button disabled class="w-full bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed">Booked</button>`;
-                            overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-emerald-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Booked by Other</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
+                            overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-yellow-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Booked by Other</h4><p class="text-sm">Time left: <span class="countdown font-bold" data-id="${gift.id}"></span></p></div></div>`;
                         }
                         break;
                     case 'purchased':
                         statusClass = 'is-purchased';
                         buttonHtml = `<button disabled class="w-full bg-gray-300 text-gray-500 font-bold py-2 px-4 rounded-lg cursor-not-allowed">Purchased</button>`;
-                        overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-slate-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Purchased</h4><p class="text-sm">Thank you!</p></div></div>`;
+                        overlayHtml = `<div class="status-overlay" data-id="${gift.id}"><div class="bg-slate-800 text-white px-6 py-3 rounded-lg shadow-xl pointer-events-none"><h4 class="font-bold text-xl">Purchased</h4><p class="text-sm">Sudah dibeli orang lain.</p></div></div>`;
                         break;
                 }
 
@@ -362,6 +392,8 @@
                 const giftId = parseInt(target.dataset.id, 10);
                 const action = target.dataset.action;
                 const gift = gifts.find(g => g.id == giftId);
+                console.log(giftId);
+                console.log(gift);
                 const userHasActiveBooking = gifts.some(g => g.status === 'booked' && g.booked_by_user_id == currentUserId);
 
                 if (action === 'book') {
@@ -371,7 +403,7 @@
                         showBookingModal(giftId);
                     }
                 } else if (action === 'manage') {
-                    showPostBookingModal(giftId);
+                    showPostBookingModal(gift);
                 }
             };
 
@@ -386,7 +418,7 @@
 
                     modalContent.innerHTML = `
                         <button class="modal-close-btn" id="close-modal-btn">&times;</button>
-                        <div class="p-6">
+                        <div class="p-6 overflow-y-auto">
                             <h3 class="text-2xl font-serif mb-4 text-gray-800">Booking Bingkisan ini</h3>
                             <div class="flex flex-col md:flex-row gap-6 mb-4">
                                 <img src="${giftDetails.image_url}" class="w-full md:w-1/3 h-auto object-cover rounded-lg">
@@ -402,9 +434,9 @@
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between gap-3">
                                 <button onclick="window.open('${giftDetails.store_url}', '_blank')" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex-grow"><i class="fas fa-shopping-cart mr-2"></i>Toko Online</button>
-                                <div class="flex gap-3">
+                                <div class="grid grid-cols-2 gap-3">
                                     <button id="cancel-modal" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold">Cancel</button>
-                                    <button id="confirm-book" data-id="${giftDetails.id}" class="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold">Booking Gift Ini</button>
+                                    <button id="confirm-book" data-id="${giftDetails.id}" class="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 font-semibold">Booking Gift Ini</button>
                                 </div>
                             </div>
                         </div>`;
@@ -420,6 +452,7 @@
                 const giftId = parseInt(e.currentTarget.dataset.id, 10);
                 try {
                     const result = await bookGiftOnServer(giftId);
+                    console.log(result);
                     if (result.success) {
                         // Refresh the gifts list from server
                         await refreshGiftsList();
@@ -428,6 +461,8 @@
                         const gift = gifts.find(g => g.id == giftId);
                         if (gift) {
                             showPostBookingModal(gift);
+                        } else {
+                            showInfoModal('Booking Interrupted', 'There was an error processing your booking. Please refresh the page.');
                         }
                     } else {
                         showInfoModal('Booking Failed', result.message);
@@ -443,14 +478,18 @@
                     <button class="modal-close-btn" id="close-modal-btn">&times;</button>
                     <div class="p-6 text-center">
                         <h3 class="text-2xl font-serif mb-2 text-green-600">Gift Booked!</h3>
-                        <p class="text-gray-600 mb-4">Barang sudah dibooking untuk anda. Silahkan selesaikan melanjutkan konfirmasi dan dengan memasukkan nomor <b>Resi Pengiriman</b> di bawah ini. Ketik "OFFLINE" jika tidak ada resi pengiriman.</p>
+                        <p class="text-gray-600 mb-4">Barang sudah dibooking untuk anda. <br> Silahkan selesaikan melanjutkan konfirmasi dan dengan memasukkan nomor <b>Resi Pengiriman</b> di bawah ini. <br><br> Ketik "OFFLINE" jika tidak ada resi pengiriman.</p>
                         <div class="text-4xl font-bold text-emerald-800 my-4" id="modal-countdown"></div>
                         <div class="my-4">
                             <label for="order-number" class="block text-sm font-medium text-gray-700 text-left">Resi Pengiriman (Required)</label>
                             <input type="text" id="order-number" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-800 focus:border-emerald-800 sm:text-sm" placeholder="e.g., SPX1234567">
                         </div>
-                        <button id="confirm-purchase" data-id="${gift.id}" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg opacity-50 cursor-not-allowed" disabled>Konfirmasi Pengiriman!</button>
-                        <button id="cancel-booking" data-id="${gift.id}" class="mt-2 text-sm text-gray-500 hover:underline">Cancel Booking Saya</button>
+                        <div class="grid grid-cols-2 gap-1">
+                        <button id="confirm-purchase" data-id="${gift.id}" class="col-span-2 w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg opacity-50 cursor-not-allowed" disabled>Konfirmasi Pengiriman!</button>
+                        <button id="show-address" data-id="${gift.id}" class="mt-2 w-full px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 font-semibold text-lg">Alamat Pengiriman</button>
+                        <button onclick="window.open('${gift.store_url}', '_blank')" class="mt-2 w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg"><i class="fas fa-shopping-cart mr-2"></i>Toko Online</button>
+                        <button id="cancel-booking" data-id="${gift.id}" class="col-span-2 mt-2 text-sm text-gray-500 hover:underline">Cancel Booking Saya</button>
+                        </div>
                     </div>`;
 
                 const orderInput = document.getElementById('order-number');
@@ -469,6 +508,23 @@
                 document.getElementById('close-modal-btn').addEventListener('click', hideModal);
                 document.getElementById('confirm-purchase').addEventListener('click', confirmPurchase);
                 document.getElementById('cancel-booking').addEventListener('click', cancelBooking);
+                document.getElementById('show-address').addEventListener('click', (e) => showAddressModal(e.currentTarget.dataset.id));
+            };
+
+            const showAddressModal = (giftId) => {
+                showModal();
+                const gift = gifts.find(g => g.id == giftId);
+                modalContent.innerHTML = `
+                    <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+                    <div class="p-6 text-center">
+                        <h3 class="text-2xl font-serif mb-2 text-green-600">Alamat Pengiriman</h3>
+                        <p class="text-gray-600 mb-4">Gibran & Diyang, Jl. Ratu Elok, Banjarbaru, Kalimantan Selatan</p>
+                        <button id="go-back" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg">Kembali</button>
+                    </div>
+                    
+                `;
+                document.getElementById('close-modal-btn').addEventListener('click', hideModal);
+                document.getElementById('go-back').addEventListener('click', () => showPostBookingModal(gift));
             };
 
             const confirmPurchase = async (e) => {
@@ -500,7 +556,7 @@
                     if (result.success) {
                         // Refresh the gifts list from server
                         await refreshGiftsList();
-                        hideModal();
+                        showInfoModal('Success', 'Booking cancelled.');
                     } else {
                         showInfoModal('Error', result.message || 'Could not cancel booking. Please try again.');
                     }
@@ -586,6 +642,30 @@
                     modal.classList.remove('flex');
                 }, 300);
             };
+
+            //button back to top
+            // Get the button
+            const mybutton = document.getElementById("btn-back-to-top");
+
+            // When the user scrolls down 20px from the top of the document, show the button
+
+            const scrollFunction = () => {
+            if (
+                document.body.scrollTop > 20 ||
+                document.documentElement.scrollTop > 20
+            ) {
+                mybutton.classList.remove("hidden");
+            } else {
+                mybutton.classList.add("hidden");
+            }
+            };
+            const backToTop = () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            };
+
+            // When the user clicks on the button, scroll to the top of the document
+            mybutton.addEventListener("click", backToTop);
+            window.addEventListener("scroll", scrollFunction);
             
             // --- INITIALIZATION ---
             document.getElementById('filters').addEventListener('click', (e) => {
