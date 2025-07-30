@@ -409,7 +409,7 @@
 
             const showBookingModal = async (giftId) => {
                 showModal();
-                modalContent.innerHTML = `<div class="p-8 flex items-center justify-center min-h-[400px] max-h-[90vh] overflow-y-auto"><div class="loader"></div></div>`;
+                modalContent.innerHTML = `<div class="p-8 flex items-center justify-center min-h-[400px] max-h-[90vh] overflow-y-scroll"><div class="loader"></div></div>`;
                 
                 try {
                     const giftDetails = await fetchGiftDetails(giftId);

@@ -58,6 +58,20 @@ CREATE TABLE `admin_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
+### 4. Gift Logs Table
+```sql
+CREATE TABLE `gift_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `gift_id` int(11) DEFAULT NULL,
+  `action` enum('opening_website','get_detail','booking') NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `gift_id` (`gift_id`),
+  CONSTRAINT `gift_logs_ibfk_1` FOREIGN KEY (`gift_id`) REFERENCES `gifts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```
+
 ## Sample Data
 
 ### Insert Sample Users

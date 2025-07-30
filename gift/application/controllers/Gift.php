@@ -19,6 +19,7 @@ class Gift extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('gift_model');
+        $this->load->model('log_model');
 
 
 
@@ -66,6 +67,9 @@ class Gift extends CI_Controller {
         $data['username'] = $username;
         $data['nama'] = $user['name'];
 
+        // Log website opening
+        $this->log_model->log_website_opening($username);
+        
         $this->load->view('gift', $data); 
     }
 
@@ -112,6 +116,8 @@ class Gift extends CI_Controller {
         $gift = $this->gift_model->get_gift($giftId);
 
         if ($gift) {
+            // Log gift detail
+            $this->log_model->log_gift_detail($this->session->userdata('username'), $giftId);
             return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode(['success' => true, 'data' => $gift]));
         } else {
             return $this->output->set_status_header(404)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'Gift not found.']));
@@ -150,7 +156,9 @@ class Gift extends CI_Controller {
         if (!$this->gift_model->book_gift($giftId, $userId)) {
             return $this->output->set_status_header(409)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'Bingkisan Tidak Tersedia. Mohon refresh.']));
         }
-
+        
+        // Log gift booking
+        $this->log_model->log_gift_booking($this->session->userdata('username'), $giftId);
         return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode(['success' => true, 'message' => 'Bingkisan berhasil di booking.']));
     }
 
@@ -178,6 +186,8 @@ class Gift extends CI_Controller {
             return $this->output->set_status_header(403)->set_content_type('application/json')->set_output(json_encode(['success' => false, 'message' => 'You are not authorized to confirm this purchase.']));
         }
 
+        // Log gift purchasing
+        $this->log_model->log_gift_purchasing($this->session->userdata('username'), $giftId);
         return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode(['success' => true, 'message' => 'Purchase confirmed.']));
     }
     

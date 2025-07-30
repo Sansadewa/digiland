@@ -9,6 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_Input $input
  * @property CI_Session $session
  * @property Gift_model $gift_model
+ * @property Log_model $log_model
  */
 class Admin extends CI_Controller {
 
@@ -17,6 +18,7 @@ class Admin extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('gift_model');
+        $this->load->model('log_model');
         
         // Check if admin is logged in (except for login page)
         if ($this->uri->segment(2) !== 'login' && !$this->is_admin_logged_in()) {
@@ -275,6 +277,73 @@ class Admin extends CI_Controller {
         }
         redirect('admin/gifts');
     }
+
+    /**
+     * Logs Management Page
+     */
+    public function logs() {
+        $this->load->view('admin/header');
+        $this->load->view('admin/log');
+    }
+
+    /**
+     * Get logs by action via AJAX
+     */
+    public function get_logs_by_action() {
+        $action = $this->input->get('action');
+        $logs = $this->log_model->get_log($action);
+        
+        // Add gift names and format data
+        foreach ($logs as &$log) {
+            if (!empty($log['gift_id'])) {
+                $gift = $this->gift_model->get_gift($log['gift_id']);
+                $log['gift_name'] = $gift ? $gift['name'] : 'Unknown Gift';
+            } else {
+                $log['gift_name'] = '-';
+            }
+            $log['created_at'] = isset($log['created_at']) ? $log['created_at'] : date('Y-m-d H:i:s');
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode($logs);
+    }
+
+    /**
+     * Get user activity via AJAX
+     */
+    public function get_user_activity() {
+        $username = $this->input->get('username');
+        $logs = $this->log_model->get_activity($username);
+        
+        // Add gift names and format data
+        foreach ($logs as &$log) {
+            if (!empty($log['gift_id'])) {
+                $gift = $this->gift_model->get_gift($log['gift_id']);
+                $log['gift_name'] = $gift ? $gift['name'] : 'Unknown Gift';
+            } else {
+                $log['gift_name'] = '-';
+            }
+            $log['created_at'] = isset($log['created_at']) ? $log['created_at'] : date('Y-m-d H:i:s');
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode($logs);
+    }
+
+    /**
+     * Get all usernames for autocomplete via AJAX
+     */
+    public function get_usernames() {
+        $usernames = $this->gift_model->get_all_users();
+        $result = [];
+        foreach ($usernames as $user) {
+            $result[] = $user['username'];
+        }
+        
+        header('Content-Type: application/json');
+        echo json_encode($result);
+    }
+
 
     /**
      * Check if admin is logged in

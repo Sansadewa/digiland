@@ -33,6 +33,7 @@
                     <a href="<?php echo base_url('admin'); ?>" class="hover:text-emerald-200">Dashboard</a>
                     <a href="<?php echo base_url('admin/users'); ?>" class="hover:text-emerald-200">Users</a>
                     <a href="<?php echo base_url('admin/gifts'); ?>" class="hover:text-emerald-200">Gifts</a>
+                    <a href="<?php echo base_url('admin/logs'); ?>" class="hover:text-emerald-200">Logs</a>
                     <a href="<?php echo base_url('admin/logout'); ?>" class="hover:text-emerald-200">Logout</a>
                 </div>
             </div>
