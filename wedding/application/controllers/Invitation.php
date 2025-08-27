@@ -57,14 +57,29 @@ class Invitation extends CI_Controller {
      * Method: POST
      */
     public function send_rsvp() {
-        $rsvp_data = [
-            'username' => $this->input->post('username'),
-            'name' => $this->input->post('name'),
-            'message' => $this->input->post('message'),
-            'attendance' => $this->input->post('attendance'),
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        $this->invitation_model->insert_rsvp($rsvp_data);
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        // Validate input
+        if (empty($data['username']) || empty($data['name'])) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['status' => 'error', 'message' => 'Missing fields'. var_dump($data)]));
+            return;
+        }
+
+        // Send data to model
+        $saved = $this->invitation_model->insert_rsvp($data);
+
+        if ($saved) {
+            $response = ['status' => 'success', 'message' => 'RSVP saved'];
+        } else {
+            $response = ['status' => 'error', 'message' => 'Failed to save'];
+        }
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
 

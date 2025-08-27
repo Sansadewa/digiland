@@ -860,11 +860,18 @@ function fadeOutAudio(duration = 1000) {
 
 // ===== RSVP FUNCTIONS =====
 let rsvpMessages = [];
+let basePath = '';
+
+if (window.location.hostname === 'localhost') {
+    basePath = 'wedding';
+}
+    
+//get url from cleaned slashes adress bar
+const url = [window.location.protocol, '', window.location.host, basePath].join('/');
+    
 //get rsvp messages from server
 function getRSVPMessages() {
-    //get url from cleaned slashes adress bar
-    const url = window.location.href;
-    fetch(url+'/get-rsvp-messages')
+    fetch([url,'get-rsvp-messages'].join('/'))
         .then(response => response.json())
         .then(data => {
             rsvpMessages = data;
@@ -899,6 +906,7 @@ function handleRSVPSubmission(e) {
     e.preventDefault();
     
     const formData = {
+        username: document.getElementById('username')?.value.trim() || '',
         name: document.getElementById('name')?.value.trim() || '',
         message: document.getElementById('message')?.value.trim() || '',
         attendance: document.getElementById('attendance')?.value || ''
@@ -912,7 +920,7 @@ function handleRSVPSubmission(e) {
     }
     
     //Send Native Ajax post
-    fetch(url + "/send-rsvp", {
+    fetch([url,'send-rsvp'].join('/'), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -921,34 +929,43 @@ function handleRSVPSubmission(e) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        if (data.status === 'success') {
+            showSuccessMessage();
+            setTimeout(() => {
+                displayAllMessages();
+                scrollToNewestMessage();
+            }, 500);
+            
+            setTimeout(() => {
+                const form = document.getElementById('rsvpForm');
+                if (form) form.reset();
+            }, 1000);
+            
+            setTimeout(() => {
+                const messagesSection = document.querySelector('#messagesContainer')?.parentElement;
+                if (messagesSection) {
+                    messagesSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 1500);
+        
+            trackEvent('rsvp_submitted', { attendance: formData.attendance });
+        } else {
+            showErrorMessage(data.message);
+        }
     })
     .catch(error => {
         console.log(error);
     });
-    
+    const newMessage = {
+        username: formData.username,
+        name: formData.name,
+        message: formData.message,
+        attendance: formData.attendance,
+        timestamp: new Date().toISOString()
+    };
     rsvpMessages.unshift(newMessage);
     
-    showSuccessMessage();
     
-    setTimeout(() => {
-        displayAllMessages();
-        scrollToNewestMessage();
-    }, 500);
-    
-    setTimeout(() => {
-        const form = document.getElementById('rsvpForm');
-        if (form) form.reset();
-    }, 1000);
-    
-    setTimeout(() => {
-        const messagesSection = document.querySelector('#messagesContainer')?.parentElement;
-        if (messagesSection) {
-            messagesSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, 1500);
-
-    trackEvent('rsvp_submitted', { attendance: formData.attendance });
 }
 
 function showSuccessMessage() {

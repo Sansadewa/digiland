@@ -327,7 +327,7 @@
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-600 mb-3 tracking-wide">NAMA</label>
                             <input type="text" id="name" placeholder="Nama" required
-                                class="w-full px-0 py-3 border-0 border-b border-gray-200 focus:ring-0 focus:border-warm-brown bg-transparent text-sm placeholder-gray-400 transition-colors">
+                                class="w-full px-0 py-3 border-0 border-b border-gray-200 focus:ring-0 focus:border-warm-brown bg-transparent text-sm placeholder-gray-400 transition-colors" value="<?php echo ($this->session->userdata('name')=='Teman dan Keluarga' ? '' : $this->session->userdata('name')); ?>">
                         </div>
                         
                         <div>
@@ -344,7 +344,7 @@
                                 <option value="tidak-hadir">Maaf, saya tidak dapat hadir</option>
                             </select>
                         </div>
-                        <input type="hidden" name="username" value="<?php echo $this->session->userdata('username'); ?>">
+                        <input type="hidden" name="username" id="username" value="<?php echo $this->session->userdata('username'); ?>">
                         <div class="pt-4">
                             <button type="submit" class="w-full bg-dark-brown hover:bg-warm-brown text-white py-3 px-6 text-sm font-medium tracking-wide transition-colors duration-300 transform hover:scale-[1.02]">
                                 Kirim
