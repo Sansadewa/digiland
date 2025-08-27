@@ -859,43 +859,23 @@ function fadeOutAudio(duration = 1000) {
 }
 
 // ===== RSVP FUNCTIONS =====
-let rsvpMessages = [
-    {
-        name: "Digiland Space",
-        message: "Selamat menempuh hidup baru Diyang Gibran! Semoga selalu bersama selamanya",
-        attendance: "hadir",
-        timestamp: new Date(),
-        id: 1
-    },
-    {
-        name: "Keluarga Besar",
-        message: "Barakallahu lakuma wa baraka alaikuma wa jama'a bainakuma fi khair",
-        attendance: "hadir",
-        timestamp: new Date(),
-        id: 2
-    },
-    {
-        name: "Sahabat Lama",
-        message: "Semoga menjadi keluarga yang sakinah, mawaddah, warahmah",
-        attendance: "hadir",
-        timestamp: new Date(),
-        id: 3
-    },
-    {
-        name: "Teman Kerja",
-        message: "Selamat ya! Semoga langgeng sampai maut memisahkan",
-        attendance: "hadir",
-        timestamp: new Date(),
-        id: 4
-    },
-    {
-        name: "Tetangga",
-        message: "Turut berbahagia atas pernikahan kalian. Semoga bahagia selalu!",
-        attendance: "hadir",
-        timestamp: new Date(),
-        id: 5
-    }
-];
+let rsvpMessages = [];
+//get rsvp messages from server
+function getRSVPMessages() {
+    //get url from cleaned slashes adress bar
+    const url = window.location.href;
+    fetch(url+'/get-rsvp-messages')
+        .then(response => response.json())
+        .then(data => {
+            rsvpMessages = data;
+            displayAllMessages();
+            trackEvent('rsvp_messages_loaded');
+        })
+        .catch(error => {
+            console.log(error);
+            trackEvent('rsvp_messages_error', { error: error.message, url: url + 'get-rsvp-messages' });
+        });
+}
 
 function validateForm(formData) {
     const { name, message, attendance } = formData;
@@ -931,11 +911,21 @@ function handleRSVPSubmission(e) {
         return;
     }
     
-    const newMessage = {
-        ...formData,
-        timestamp: new Date(),
-        id: Date.now() + Math.random()
-    };
+    //Send Native Ajax post
+    fetch(url + "/send-rsvp", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.log(error);
+    });
     
     rsvpMessages.unshift(newMessage);
     
@@ -1136,25 +1126,25 @@ function showCopyError() {
 
 // ===== PARTICLE EFFECTS =====
 function createParticle() {
-    const particleContainer = document.querySelector('.invitation-bg > div');
-    if (!particleContainer) return;
+    // const particleContainer = document.querySelector('.invitation-bg > div');
+    // if (!particleContainer) return;
 
-    const particle = document.createElement('div');
-    particle.className = 'particle absolute w-1 h-1 bg-warm-brown/30 rounded-full pointer-events-none';
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.animationDelay = Math.random() * 2 + 's';
-    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+    // const particle = document.createElement('div');
+    // particle.className = 'particle absolute w-1 h-1 bg-warm-brown/30 rounded-full pointer-events-none';
+    // particle.style.left = Math.random() * 100 + '%';
+    // particle.style.animationDelay = Math.random() * 2 + 's';
+    // particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
     
-    // Add CSS animation for floating particles
-    particle.style.animation = `float-particle ${particle.style.animationDuration} linear infinite ${particle.style.animationDelay}`;
+    // // Add CSS animation for floating particles
+    // particle.style.animation = `float-particle ${particle.style.animationDuration} linear infinite ${particle.style.animationDelay}`;
     
-    particleContainer.appendChild(particle);
+    // particleContainer.appendChild(particle);
 
-    setTimeout(() => {
-        if (particle.parentNode) {
-            particle.remove();
-        }
-    }, 10000);
+    // setTimeout(() => {
+    //     if (particle.parentNode) {
+    //         particle.remove();
+    //     }
+    // }, 10000);
 }
 
 // ===== UTILITY FUNCTIONS =====
@@ -1373,6 +1363,7 @@ window.addEventListener('load', function() {
                 initAccessibility();
                 initMobileOptimizations();
                 initFormEnhancements();
+                getRSVPMessages();
                 
                 // Start particle effects
                 setInterval(createParticle, 2000);
@@ -1407,7 +1398,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(createParticle, 2000);
     }, 2000);
     // Initialize dynamic name system
-    initDynamicName();
+    // initDynamicName();
     
     const rsvpForm = document.getElementById('rsvpForm');
     if (rsvpForm) {
