@@ -695,17 +695,24 @@ function initWeddingEffects() {
             if (heroImage) heroImage.classList.remove('colored');
         }
         
+        // Iterate through each couple frame and check if it is in view
         const coupleFrames = document.querySelectorAll('.couple-frame');
         coupleFrames.forEach(frame => {
+            // Get the bounding rectangle of the frame
             const rect = frame.getBoundingClientRect();
+            // Get the couple image element within the frame
             const coupleImage = frame.querySelector('.couple-image');
             
+            // Calculate the center of the frame's vertical position
             const sectionCenter = rect.top + (rect.height / 2);
-            const screenCenter = windowHeight / 2;
+            // Calculate the center of the viewport
+            const screenCenter = windowHeight / 1.5;
             
+            // Check if the frame is in view and expand the couple image if it is
             if (sectionCenter < screenCenter && rect.bottom > 0) {
                 if (coupleImage) coupleImage.classList.add('expanded');
             } else {
+                // If the frame is not in view, collapse the couple image
                 if (coupleImage) coupleImage.classList.remove('expanded');
             }
         });
