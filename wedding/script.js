@@ -50,7 +50,7 @@ function updateNameInDocument(guestName) {
 // ===== PUZZLE LOGIC =====
 const PUZZLE_ROWS = 2;
 const PUZZLE_COLS = 2;
-const IMAGE_SRC = "./assets/916.jpg";
+const IMAGE_SRC = "./assets/cover1.webp";
 const PUZZLE_BOARD_SCALE = window.innerWidth <= 1024 ? 0.9 : 0.75;
 
 let canvas = null;
@@ -515,23 +515,60 @@ function openInvitation() {
 }
 // ===== GALLERY FUNCTIONS =====
 function initGallery() {
-    const galleryData = [
-        [
-            { src: './assets/gal1.jpg', alt: 'Wedding Photo 1', height: 'h-64' },
-            { src: './assets/gal2.jpg', alt: 'Wedding Photo 2', height: 'h-48' }
-        ],
-        [
-            { src: './assets/gal3.jpg', alt: 'Wedding Photo 3', height: 'h-80' },
-            { src: './assets/gal4.jpg', alt: 'Wedding Photo 4', height: 'h-56' }
-        ],
-        [
-            { src: './assets/img1.jpg', alt: 'Wedding Photo 5', height: 'h-64' },
-            { src: './assets/img2.jpg', alt: 'Wedding Photo 6', height: 'h-52' }
-        ],
-        [
-            { src: './assets/img3.png', alt: 'Wedding Photo 7', height: 'h-72' }
-        ]
-    ];
+    // Build gallery data from gal1.webp ... gal14.webp with auto heights by aspect ratio
+    const totalImages = 14;
+    const numColumns = 4;
+
+    function loadImage(src) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = function() {
+                resolve({ src, width: img.naturalWidth || img.width, height: img.naturalHeight || img.height });
+            };
+            img.onerror = function() {
+                // Fallback if image can't be loaded; use default medium height
+                resolve({ src, width: 1, height: 1 });
+            };
+            img.src = src;
+        });
+    }
+
+    function getHeightClassFromAspect(aspect, index) {
+        // aspect = width / height
+        // Landscape => smaller height; Portrait => taller height; Square-ish => medium
+        if (aspect > 1.2) {
+            // landscape
+            return index % 2 === 0 ? 'h-48' : 'h-56';
+        } else if (aspect < 0.85) {
+            // portrait
+            return index % 2 === 0 ? 'h-80' : 'h-72';
+        } else {
+            // square-ish
+            return 'h-64';
+        }
+    }
+
+    const sources = Array.from({ length: totalImages }, (_, i) => `./assets/gal${i + 1}.webp`);
+
+    Promise.all(sources.map(loadImage)).then((loaded) => {
+        const photos = loaded.map((meta, idx) => {
+            const aspect = meta.width / Math.max(1, meta.height);
+            return {
+                src: meta.src,
+                alt: `Wedding Photo ${idx + 1}`,
+                height: getHeightClassFromAspect(aspect, idx)
+            };
+        });
+
+        // Distribute photos into columns (round-robin)
+        const columns = Array.from({ length: numColumns }, () => []);
+        photos.forEach((photo, i) => {
+            columns[i % numColumns].push(photo);
+        });
+
+        const galleryData = columns;
+        loadGallery(galleryData);
+    });
 
     function createGalleryColumn(photos, columnWidth = 'w-40') {
         let columnHTML = `<div class="gallery-column ${columnWidth} flex-shrink-0">`;
@@ -551,7 +588,7 @@ function initGallery() {
         return columnHTML;
     }
 
-    function loadGallery() {
+    function loadGallery(galleryData) {
         const galleryGrid = document.getElementById('galleryGrid');
         const galleryContainer = document.getElementById('galleryContainer');
         const galleryLoading = document.getElementById('galleryLoading');
@@ -615,7 +652,7 @@ function initGallery() {
         });
     }
 
-    loadGallery();
+    // rendering happens after images are measured (see Promise above)
 }
 
 // ===== VIDEO INITIALIZATION =====
@@ -1146,14 +1183,24 @@ function handleImageError(img) {
 // ===== PERFORMANCE OPTIMIZATIONS =====
 function preloadImages() {
     const imageUrls = [
-        './assets/img1.jpg',
-        './assets/img2.jpg',
-        './assets/img3.png',
-        './assets/gal1.jpg',
-        './assets/gal2.jpg',
-        './assets/gal3.jpg',
-        './assets/gal4.jpg',
-        './assets/916.jpg',
+        './assets/CroppedGib.webp',
+        './assets/CroppedDyg.webp',
+        './assets/farewell.webp',
+        './assets/gal1.webp',
+        './assets/gal2.webp',
+        './assets/gal3.webp',
+        './assets/gal4.webp',
+        './assets/gal5.webp',
+        './assets/gal6.webp',
+        './assets/gal7.webp',
+        './assets/gal8.webp',
+        './assets/gal9.webp',
+        './assets/gal10.webp',
+        './assets/gal11.webp',
+        './assets/gal12.webp',
+        './assets/gal13.webp',
+        './assets/gal14.webp',
+        './assets/cover1.webp',
         './assets/digiland-logo.png',
         './assets/bismillah.png'
     ];
