@@ -31,7 +31,7 @@ body {
 .hero-image-inner {
     width: 100%;
     height: 100%;
-    background-image: url('./assets/cover1.w');
+    background-image: url('./assets/cover1.webp');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
