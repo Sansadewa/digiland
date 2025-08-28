@@ -1,5 +1,3 @@
-
-
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         
@@ -30,6 +28,14 @@
             </div>
         </div>
 
+        <!-- Search Input -->
+        <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" id="searchUsers" class="form-control" placeholder="Search users...">
+            </div>
+        </div>
+
         <!-- Users Table -->
         <div class="bg-white shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 sm:px-6">
@@ -38,7 +44,7 @@
                 </h3>
             </div>
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
+                <table class="min-w-full divide-y divide-gray-200" id="usersTable">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
@@ -103,4 +109,19 @@
     </div>
 
 </body>
-</html> 
+
+<script>
+$(document).ready(function() {
+    // Search functionality
+    $('#searchUsers').on('keyup', function() {
+        const searchText = $(this).val().toLowerCase();
+        
+        $('#usersTable tbody tr').each(function() {
+            const rowText = $(this).text().toLowerCase();
+            $(this).toggle(rowText.indexOf(searchText) > -1);
+        });
+    });
+});
+</script>
+
+</html>
