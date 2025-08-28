@@ -178,9 +178,10 @@
                     <p class="mb-2">Untuk keamanan, tolong kirimkan semua hadiah ke alamat berikut:</p>
                     <div class="bg-gray-100 p-4 rounded-md border border-gray-200">
                         <p class="font-bold">Gibran & Diyang</p>
-                        <p>Jl. Ratu Elok</p>
-                        <p>Banjarbaru</p>
-                        <p>Indonesia</p>
+                        <p>Komplek Ratu Elok, Jl. Puput no. 257, Banjarbaru Selatan.</p>
+                        <p>Kota Banjarbaru</p>
+                        <p>Kalimantan Selatan</p>
+                        <p>70714</p>
                     </div>
                     <p class="mt-4">Terima kasih atas kebaikannya :)</p>
                 </div>
@@ -518,7 +519,7 @@
                     <button class="modal-close-btn" id="close-modal-btn">&times;</button>
                     <div class="p-6 text-center">
                         <h3 class="text-2xl font-serif mb-2 text-green-600">Alamat Pengiriman</h3>
-                        <p class="text-gray-600 mb-4">Gibran & Diyang, Jl. Ratu Elok, Banjarbaru, Kalimantan Selatan</p>
+                        <p class="text-gray-600 mb-4">Gibran & Diyang, Komplek Ratu Elok, Jl. Puput no. 257, Banjarbaru Selatan, Kota Banjarbaru, Kalimantan Selatan. 70714.</p>
                         <button id="go-back" class="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold text-lg">Kembali</button>
                     </div>
                     

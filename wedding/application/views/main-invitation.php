@@ -185,7 +185,7 @@
                                     <div class="p-4 text-white">
                                         <h3 class="font-display text-2xl mb-1">GIBRAN SANSADEWA ASSHADIQI</h3>
                                         <p class="text-xs opacity-90 italic mb-1">bin</p>
-                                        <p class="text-sm font-medium mb-2">Agus Hariyanto & Silvi Madonna Liani</p>
+                                        <p class="text-sm font-medium mb-2">Agus Hariyanto & Silvy Madonna Liani</p>
                                         <a href="https://instagram.com/gibransansa" target="_blank" rel="noopener noreferrer" 
                                         class="inline-flex items-center justify-center bg-transparent border border-white/60 hover:bg-white/10 text-white text-xs px-3 py-1.5 rounded-md transition-all duration-300 hover:scale-105 hover:border-white">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
@@ -213,15 +213,15 @@
                 </div>
                 
                 <div class="text-center mb-12 fade-in">
-                    <p class="inline-flex text-sm text-gray-600 mb-1">Minggu, </p>
+                    <p class="inline-flex font-display text-2xl text-gray-600 mb-1">Minggu, </p>
                     <h2 class="inline-flex font-display text-3xl text-warm-brown mb-2">07 September</h2>
-                    <p class="inline-flex text-sm text-gray-600 mb-1"> 2025</p>
+                    <p class="inline-flex font-display text-2xl text-gray-600 mb-1"> 2025</p>
                     <p class="text-lg text-warm-brown font-medium">09.00 - 14.00 WITA</p>
                 </div>
                 
                 <div class="text-center mb-12 fade-in">
-                    <p class="text-sm text-gray-700 font-medium mb-4">GEDUNG SERBAGUNA UNIVERSITAS LAMBUNG MANGKURAT</p>
-                    <p class="text-xs text-gray-600 mb-6">BANJARBARU, KALIMANTAN SELATAN</p>
+                    <p class="text-sm text-gray-700 font-medium mb-4">Gedung Serbaguna<br>Universitas Lambung Mangkurat</p>
+                    <p class="text-xs text-gray-600 mb-6">Banjarbaru, Kalimantan Selatan</p>
                     
                     <div class="flex space-x-3 mb-6">
                         <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding%20Diyang%20%26%20Gibran&dates=20250907T010000Z/20250907T060000Z&details=Acara%20pernikahan%20Diyang%20dan%20Gibran&location=Gedung%20Serbaguna%20Universitas%20Lambung%20Mangkurat%2C%20Banjarbaru%2C%20Kalimantan%20Selatan" 
@@ -247,7 +247,7 @@
                         <p class="text-sm text-warm-brown font-medium mb-3">09.00 - 11.00 WITA</p>
                     </div>
                         
-                    <p class="text-sm text-gray-700 font-medium mb-1">Rumah - Komplek Cahaya Ratu Elok</p>
+                    <p class="text-sm text-gray-700 font-medium mb-1">Rumah Kediaman - Komplek Cahaya Ratu Elok, Jl. Puput No.257, Banjarbaru Selatan.</p>
                 </div>
 
                 <div class="w-24 h-0.5 bg-warm-brown mx-auto mb-12 fade-in"></div>
@@ -397,8 +397,8 @@
                     <div id="giftDetails" class="bg-white border-2 border-gray-300 p-8 text-center hidden">
                         <div class="mb-4">
                             <h4 class="font-medium text-gray-700 mb-2 text-sm tracking-wide">Mandiri</h4>
-                            <p class="font-mono text-lg font-medium text-gray-800 mb-1">9030166111</p>
-                            <p class="text-sm text-gray-600">a.n Diyang Gita Cendekia</p>
+                            <p class="font-mono text-lg font-medium text-gray-800 mb-1">310013802254</p>
+                            <p class="text-sm text-gray-600">a.n Gibran Sansadewa Asshadiqi</p>
                         </div>
                         
                         <button onclick="copyAccountNumber()" id="copyBtn" class="bg-dark-brown hover:bg-warm-brown text-white px-6 py-2 text-sm font-medium tracking-wide transition-colors duration-300">

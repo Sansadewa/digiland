@@ -50,7 +50,9 @@ function updateNameInDocument(guestName) {
 // ===== PUZZLE LOGIC =====
 const PUZZLE_ROWS = 2;
 const PUZZLE_COLS = 2;
-const IMAGE_SRC = "./assets/cover1.webp";
+const images = ['cover1', 'cover2', 'gal17', 'gal3', 'cover3'];
+const shuffledImage = images[Math.floor(Math.random() * images.length)];
+const IMAGE_SRC = `./assets/${shuffledImage}.webp`;
 const PUZZLE_BOARD_SCALE = window.innerWidth <= 1024 ? 0.9 : 0.75;
 
 let canvas = null;
@@ -516,8 +518,8 @@ function openInvitation() {
 // ===== GALLERY FUNCTIONS =====
 function initGallery() {
     // Build gallery data from gal1.webp ... gal14.webp with auto heights by aspect ratio
-    const totalImages = 14;
-    const numColumns = 4;
+    const totalImages = 19;
+    const numColumns = 5;
 
     function loadImage(src) {
         return new Promise((resolve) => {
@@ -575,7 +577,7 @@ function initGallery() {
         
         photos.forEach(photo => {
             columnHTML += `
-                <div class="${photo.height} bg-gray-200 overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer gallery-item" 
+                <div class="${photo.height} bg-gray-200 overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer gallery-item border-4 border-yellow-600" 
                     data-src="${photo.src}" data-alt="${photo.alt}">
                     <img src="${photo.src}" alt="${photo.alt}" class="w-full h-full object-cover" 
                         onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-br from-warm-brown/20 to-light-brown/20 flex items-center justify-center\\'>
@@ -1068,7 +1070,7 @@ function showGiftDetails() {
 }
 
 function copyAccountNumber() {
-    const accountNumber = '9030166111';
+    const accountNumber = '310013802254';
     
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(accountNumber).then(() => {
@@ -1215,6 +1217,7 @@ function preloadImages() {
         './assets/gal13.webp',
         './assets/gal14.webp',
         './assets/cover1.webp',
+        './assets/cover2.webp',
         './assets/digiland-logo.png',
         './assets/bismillah.png'
     ];
