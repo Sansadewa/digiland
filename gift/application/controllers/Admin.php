@@ -80,46 +80,58 @@ class Admin extends CI_Controller {
      * Add User
      */
     public function add_user() {
-        if ($this->input->post()) {
+        // Set default response
+        $response = ['status' => 'error', 'message' => 'An error occurred'];
+        
+        if ($this->input->is_ajax_request() && $this->input->post()) {
             $username = $this->input->post('username');
             
             // Check if username already exists
             $existing_user = $this->gift_model->get_user_by_username($username);
-
             
             if ($existing_user) {
-                $this->session->set_flashdata('error', 'Username ' . $username . ' already exists');
-                redirect('admin/users');
+                $response['message'] = 'Username ' . $username . ' already exists';
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($response));
+                return;
             }
             
-            //check if username uses preserved routes or method
+            // Check if username uses preserved routes or methods
             $reserved_routes = ['admin', 'login', 'logout', 'users', 'add_user', 'edit_user', 'delete_user', 'gifts', 'add_gift', 'edit_gift', 'delete_gift', 'reset_gift'];
             if (in_array($username, $reserved_routes)) {
-                $this->session->set_flashdata('error', 'Username ' . $username . ' is reserved');
-                redirect('admin/users');
+                $response['message'] = 'Username ' . $username . ' is reserved';
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($response));
+                return;
             }
 
             $user_data = [
                 'username' => $username,
                 'name' => $this->input->post('name'),
                 'phone' => $this->input->post('phone'),
-                'show_gift_section' => $this->input->post('show_gift_section'),
-                'difficulty' => $this->input->post('difficulty'),
+                'show_gift_section' => $this->input->post('show_gift_section') ? 1 : 0,
+                'difficulty' => (int)$this->input->post('difficulty') ?: 0,
                 'created_at' => date('Y-m-d H:i:s')
             ];
-            
-            // Use the database insert directly since get_user_by_username creates users
-            $this->db->insert('users', $user_data);
-            
-            if ($this->db->affected_rows() > 0) {
-                $this->session->set_flashdata('success', 'User added successfully');
+
+            if ($this->db->insert('users', $user_data)) {
+                $response = [
+                    'status' => 'success',
+                    'message' => 'User added successfully!'
+                ];
             } else {
-                $this->session->set_flashdata('error', 'Failed to add user');
+                $response['message'] = 'Failed to add user. Please try again.';
             }
-            redirect('admin/users');
+        } else {
+            $response['message'] = 'Invalid request';
         }
-        $this->load->view('admin/header');
-        $this->load->view('admin/add_user');
+        
+        // Return JSON response
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
     /**
@@ -135,7 +147,7 @@ class Admin extends CI_Controller {
                 'name' => $this->input->post('name'),
                 'phone' => $this->input->post('phone'),
                 'show_gift_section' => $this->input->post('show_gift_section'),
-                'difficulty' => $this->input->post('difficulty')
+                'difficulty' => (int)$this->input->post('difficulty') ?: 0
             ];
             
             if ($this->gift_model->update_user($user_id, $user_data)) {
