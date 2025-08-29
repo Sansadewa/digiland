@@ -99,6 +99,13 @@ Kami yang berbahagia
                         class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                         Reset
                     </button>
+                    <button type="button" id="addAndCopyBtn"
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <span id="addAndCopyText">Add & Copy</span>
+                        <span id="addAndCopySpinner" class="ml-2 hidden">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
                     <button type="submit" 
                         class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-800 hover:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-800">
                         <span id="submitButtonText">Add User</span>
@@ -322,6 +329,76 @@ $('#userForm').on('submit', function(e) {
         }
     });
 });
+
+// Handle Add & Copy button click
+$('#addAndCopyBtn').on('click', function() {
+    const form = $('#userForm');
+    const submitBtn = $(this);
+    const submitText = $('#addAndCopyText');
+    const spinner = $('#addAndCopySpinner');
+    const messageDiv = $('#formMessage');
+    
+    // Show loading state
+    submitBtn.prop('disabled', true);
+    submitText.text('Adding...');
+    spinner.removeClass('hidden');
+    messageDiv.removeClass('text-red-600 text-green-600').text('');
+    
+    // Submit form via AJAX
+    $.ajax({
+        url: '<?php echo base_url("admin/users/add_user"); ?>',
+        type: 'POST',
+        data: form.serialize(),
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                // Show success message
+                messageDiv.removeClass('text-red-600').addClass('text-green-600').text('User added successfully! Copying invitation...');
+                
+                // Get the invitation text
+                const name = $('#name').val();
+                const username = $('#username').val();
+                let template = $('#inviteTemplate').val();
+                template = template.replace(/^\s+/gm, '');
+                
+                const message = template
+                    .replace(/\$name/g, name)
+                    .replace(/\$username/g, username);
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(message).then(function() {
+                    messageDiv.text('User added and invitation copied to clipboard!');
+                    
+                    // Reset form and reload after a delay
+                    setTimeout(() => {
+                        form[0].reset();
+                        window.location.reload();
+                    }, 1000);
+                }).catch(function(err) {
+                    console.error('Copy failed:', err);
+                    messageDiv.removeClass('text-green-600').addClass('text-yellow-600')
+                        .text('User added but failed to copy invitation. ' + (err.message || ''));
+                });
+            } else {
+                // Show error message
+                messageDiv.removeClass('text-green-600').addClass('text-red-600')
+                    .text(response.message || 'An error occurred');
+            }
+        },
+        error: function(xhr) {
+            const response = xhr.responseJSON || {};
+            messageDiv.removeClass('text-green-600').addClass('text-red-600')
+                .text(response.message || 'Failed to add user. Please try again.');
+        },
+        complete: function() {
+            // Reset button state
+            submitBtn.prop('disabled', false);
+            submitText.text('Add & Copy');
+            spinner.addClass('hidden');
+        }
+    });
+});
+
 </script>
 
 </html>
