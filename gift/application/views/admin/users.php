@@ -27,7 +27,31 @@
                 </a>
             </div>
         </div>
+        <!-- Template Textarea -->
+        <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+            <label for="inviteTemplate" class="block text-sm font-medium text-gray-700 mb-2">Invitation Template</label>
+            <textarea id="inviteTemplate" class="w-full h-48 p-3 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" 
+                placeholder="Enter your invitation template here...">Assalamualaikum warahmatullahi wabarakatuh
+        *Kepada Yth. $name*
 
+        Tanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara pernikahan kami.
+
+        *Gibran Sansadewa Asshadiqi*
+                        *&* 
+        *Diyang Gita Cendekia*
+
+        Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu berkenan untuk hadir dan memberikan doa restu.
+
+        untuk info lengkap mempelai dan acara bisa kunjungi :
+        https://digiland.space/$username
+
+        Wassalamualaikum warahmatullahi wabarakatuh
+        Kami yang berbahagia
+        *Keluarga Kedua Mempelai*</textarea>
+            <div class="mt-2 text-xs text-gray-500">
+                Use <code>$name</code> for the recipient's name and <code>$username</code> for their username.
+            </div>
+        </div>
         <!-- Search Input -->
         <div class="mb-3">
             <div class="input-group">
@@ -51,7 +75,6 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registry URL</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Show Gift</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difficulty</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -84,12 +107,14 @@
                                 <?php echo $user['show_gift_section'] ? 'Yes' : 'No'; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <?php echo $user['difficulty']; ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <?php echo date('M j, Y g:i A', strtotime($user['created_at'])); ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button onclick="copyInvite(event, '<?php echo addslashes($user['name']); ?>', '<?php echo $user['username']; ?>')" 
+                                    class="text-emerald-600 hover:text-emerald-900 mr-3"
+                                    title="Copy Invitation">
+                                    <i class="fas fa-envelope"></i> Invite
+                                </button>
                                 <a href="<?php echo base_url('admin/users/edit/' . $user['id']); ?>" class="text-emerald-600 hover:text-emerald-900 mr-3">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
@@ -122,6 +147,51 @@ $(document).ready(function() {
         });
     });
 });
+
+function copyInvite(event, name, username) {
+    // Prevent default button behavior and get button reference
+    event.preventDefault();
+    const button = event.currentTarget;
+    const originalContent = button.innerHTML;
+    
+    // Get the template and replace placeholders
+    let template = document.getElementById('inviteTemplate').value;
+    // Remove leading spaces from each line of the template
+    // template = template.replace(/^\s+/gm, '');
+    
+    let message = template
+        .replace(/\$name/g, name)
+        .replace(/\$username/g, username);
+    
+    // Show loading state
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Copying...';
+    button.disabled = true;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(message).then(function() {
+        // Show success message
+        console.log("Sukses Copy");
+        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        button.classList.add('text-green-600');
+        
+        // Revert button after 2 seconds
+        setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.classList.remove('text-green-600');
+            button.disabled = false;
+        }, 2000);
+        
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        button.innerHTML = '<i class="fas fa-times"></i> Failed';
+        button.classList.add('text-red-600');
+        setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.classList.remove('text-red-600');
+            button.disabled = false;
+        }, 2000);
+    });
+}
 </script>
 
 </html>
