@@ -531,7 +531,7 @@ function openInvitation() {
         if (hero) hero.scrollIntoView({ behavior: 'smooth' });
         
         initWeddingEffects();
-        initAudioPlayer(); // ← Tambahkan ini
+        initAudioPlayer(20); 
         trackEvent('invitation_opened');
     }, 1500);
 }
@@ -767,7 +767,7 @@ function initWeddingEffects() {
 let backgroundMusic = null;
 let isPlaying = false;
 
-function initAudioPlayer() {
+function initAudioPlayer(startTime = 0) {
     backgroundMusic = document.getElementById('backgroundMusic');
     const audioToggle = document.getElementById('audioToggle');
     const audioPlayer = document.getElementById('audioPlayer');
@@ -780,7 +780,7 @@ function initAudioPlayer() {
     audioPlayer.classList.remove('hidden');
     
     // Set volume
-    backgroundMusic.volume = 0.2;
+    backgroundMusic.volume = 0.3;
     
     // Audio toggle click handler
     audioToggle.addEventListener('click', toggleAudio);
@@ -806,10 +806,51 @@ function initAudioPlayer() {
         console.error('Audio error:', e);
         trackEvent('audio_error', { error: e.message });
     });
+
+    // Handle tab/app visibility changes
+    let wasPlayingBeforeBlur = false;
+    
+    const handleVisibilityChange = () => {
+        if (document.hidden) {
+            // Tab/app lost focus
+            wasPlayingBeforeBlur = isPlaying;
+            if (isPlaying) {
+                pauseAudio();
+            }
+        } else if (wasPlayingBeforeBlur) {
+            // Tab/app regained focus and was playing before
+            playAudio(backgroundMusic.currentTime);
+        }
+    };
+    
+    // For modern browsers
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // For older browsers and some mobile browsers
+    window.addEventListener('blur', () => {
+        if (document.hidden) return; // Skip if already handled by visibilitychange
+        wasPlayingBeforeBlur = isPlaying;
+        if (isPlaying) {
+            pauseAudio();
+        }
+    });
+    
+    window.addEventListener('focus', () => {
+        if (wasPlayingBeforeBlur && !document.hidden) {
+            playAudio(backgroundMusic.currentTime);
+        }
+    });
+    
+    // For iOS Safari when page is shown from app switcher
+    document.addEventListener('resume', () => {
+        if (wasPlayingBeforeBlur) {
+            playAudio(backgroundMusic.currentTime);
+        }
+    }, false);
     
     // Auto-play with user interaction (modern browsers require this)
     setTimeout(() => {
-        playAudio();
+        playAudio(startTime);
     }, 2000);
 }
 
@@ -823,8 +864,13 @@ function toggleAudio() {
     }
 }
 
-function playAudio() {
+function playAudio(startTime = 0) {
     if (!backgroundMusic) return;
+    
+    // Set the current time if startTime is provided
+    if (startTime > 0) {
+        backgroundMusic.currentTime = startTime;
+    }
     
     const playPromise = backgroundMusic.play();
     
