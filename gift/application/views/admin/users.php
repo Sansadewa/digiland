@@ -275,6 +275,8 @@ function resetAddUserForm() {
     document.getElementById('userForm').reset();
     document.getElementById('formMessage').textContent = '';
     document.getElementById('formMessage').className = 'mt-3 text-sm';
+    // Reset modified state
+    $('#username').data('modified', false);
 }
 
 // Handle form submission
@@ -397,6 +399,34 @@ $('#addAndCopyBtn').on('click', function() {
             spinner.addClass('hidden');
         }
     });
+});
+
+// Auto-generate username from name
+$('#name').on('input', function() {
+    const usernameField = $('#username');
+    // Only generate if username is empty or hasn't been manually modified
+    if (!usernameField.data('modified') && usernameField.val() === '') {
+        const name = $(this).val().trim();
+        if (name.length > 0) {
+            // Remove special characters and convert to uppercase
+            let generated = name.replace(/[^a-zA-Z]/g, '').toUpperCase();
+            // Take first 6 characters or pad with random letters if shorter
+            if (generated.length < 6) {
+                const randomChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+                while (generated.length < 6) {
+                    generated += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+                }
+            } else {
+                generated = generated.substring(0, 6);
+            }
+            usernameField.val(generated);
+        }
+    }
+});
+
+// Track if username was manually modified
+$('#username').on('input', function() {
+    $(this).data('modified', $(this).val().length > 0);
 });
 
 </script>
