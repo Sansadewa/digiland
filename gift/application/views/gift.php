@@ -431,7 +431,7 @@
                             </div>
                             <div class="bg-gray-100 p-4 rounded-lg border mb-4">
                                 <h5 class="font-bold mb-1">Ship To:</h5>
-                                <p class="text-sm text-gray-700">Gibran & Diyang, Jl. Ratu Elok, Banjarbaru, Kalimantan Selatan</p>
+                                <p class="text-sm text-gray-700">Gibran & Diyang, Komplek Ratu Elok, Jl. Puput no. 257, Banjarbaru Selatan, Kota Banjarbaru, Kalimantan Selatan. 70714.</p>
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between gap-3">
                                 <button onclick="window.open('${giftDetails.store_url}', '_blank')" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex-grow"><i class="fas fa-shopping-cart mr-2"></i>Toko Online</button>

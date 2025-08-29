@@ -5,6 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGILAND - Wedding Invitation</title>
+    <meta name="title" content="DIGILAND - Wedding Invitation">
+    <meta name="description" content="Undangan pernikahan Gibran & Diyang">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= current_url() ?>">
+    <meta property="og:title" content="DIGILAND - Wedding Invitation">
+    <meta property="og:description" content="Undangan pernikahan Gibran & Diyang">
+    <meta property="og:image" content="<?= base_url('assets/cover2.webp') ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?= current_url() ?>">
+    <meta property="twitter:title" content="DIGILAND - Wedding Invitation">
+    <meta property="twitter:description" content="Undangan pernikahan Gibran & Diyang">
+    <meta property="twitter:image" content="<?= base_url('assets/cover2.webp') ?>">
+    
     <link rel="icon" href="assets/Digiland.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +52,8 @@
     <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="font-sans overflow-x-hidden bg-cream">
+    <h1 class="sr-only">DIGILAND - Wedding Invitation</h1>
+    <img src="assets/cover2.webp" alt="DIGILAND" class="sr-only" />
     <!-- Puzzle Section -->
     <section id="puzzleSection" class="relative w-full h-screen invitation-bg flex justify-center items-center overflow-hidden">
         <div class="w-full max-w-md mx-auto h-screen relative">
