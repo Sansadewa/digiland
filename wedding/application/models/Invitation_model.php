@@ -23,7 +23,7 @@ class Invitation_model extends CI_Model {
      */
     public function get_user_by_username($username) {
         // First, try to find existing user
-        $user = $this->db->where('username', $username)->get('users')->row_array();
+        $user = $this->db->where('LOWER(username)', strtolower($username))->get('users')->row_array();
         
         if ($user) {
             return $user;

@@ -64,6 +64,7 @@ let knobSize;
 let puzzleOffsetX, puzzleOffsetY;
 
 let pieces = [];
+let lockedPieces = []; // Reset locked pieces
 const sourceImage = new Image();
 
 let draggedPiece = null;
@@ -169,7 +170,7 @@ class Piece {
 
         context.drawImage(sourceImage, sX, sY, sWidth, sHeight, dX, dY, dWidth, dHeight);
 
-        context.strokeStyle = this.isLocked ? 'rgba(139, 115, 85, 0.3)' : '#8b7355';
+        context.strokeStyle = this.isLocked ? 'rgba(139, 115, 85, 0.3)' : 'rgb(255, 230, 0)';
         context.lineWidth = this.isLocked ? 1 : 2;
         context.stroke();
 
@@ -249,8 +250,8 @@ function init() {
         }, 1000);
         return;
     }
-
     canvas.style.visibility = 'visible';
+    
     
     sourceImage.onload = () => {
         console.log("Image loaded successfully!");
@@ -307,6 +308,7 @@ function init() {
 
 function generatePieces() {
     pieces = [];
+    lockedPieces = []; // Reset locked pieces
     const shapes = Array(PUZZLE_ROWS).fill(null).map(() => Array(PUZZLE_COLS).fill(null));
 
     for (let r = 0; r < PUZZLE_ROWS; r++) {
@@ -397,10 +399,19 @@ function onMouseUp() {
             draggedPiece.x = draggedPiece.correctX;
             draggedPiece.y = draggedPiece.correctY;
             draggedPiece.isLocked = true;
-
-            const index = draggedPiece.row * PUZZLE_COLS + draggedPiece.col;
-            const lastPiece = pieces.pop();
-            pieces.splice(index, 0, lastPiece);
+            
+            // Move to locked pieces array
+            const index = pieces.indexOf(draggedPiece);
+            if (index > -1) {
+                pieces.splice(index, 1);
+                lockedPieces.push(draggedPiece);
+                
+                // Sort locked pieces by their original position (top to bottom, left to right)
+                lockedPieces.sort((a, b) => {
+                    if (a.row !== b.row) return a.row - b.row;
+                    return a.col - b.col;
+                });
+            }
 
             checkWinCondition();
         }
@@ -462,22 +473,31 @@ function gameLoop() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Draw background
     ctx.save();
     ctx.fillStyle = 'white';
     ctx.fillRect(puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
     ctx.restore();
 
+    // Draw border
     ctx.save();
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 3;
     ctx.strokeRect(puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
     ctx.restore();
 
+    // Draw faint image preview
     ctx.save();
     ctx.globalAlpha = 0.15;
     ctx.drawImage(sourceImage, puzzleOffsetX, puzzleOffsetY, puzzleWidth, puzzleHeight);
     ctx.restore();
 
+    // Draw locked pieces first (in their correct positions)
+    for (const piece of lockedPieces) {
+        piece.draw(ctx);
+    }
+
+    // Then draw active pieces on top
     for (const piece of pieces) {
         piece.draw(ctx);
     }
@@ -1370,14 +1390,9 @@ function initFormEnhancements() {
 window.addEventListener('load', function() {
     const container = document.querySelector('.invitation-bg');
     if (container) {
-        container.style.opacity = '0';
-
-        setTimeout(() => {
-            container.style.transition = 'opacity 1s ease-in-out';
-            container.style.opacity = '1';
 
             setTimeout(() => {
-                init();
+                // init();
                 preloadImages();
                 initScrollEffects();
                 initAccessibility();
@@ -1397,7 +1412,7 @@ window.addEventListener('load', function() {
                     }
                 });
             }, 500);
-        }, 100);
+ 
     }
 });
 
@@ -1416,7 +1431,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Start particle effects
         setInterval(createParticle, 2000);
-    }, 2000);
+    }, 1000);
     // Initialize dynamic name system
     // initDynamicName();
     

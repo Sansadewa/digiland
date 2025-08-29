@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <base href="<?= (ENVIRONMENT === 'production') ? '/' : '/wedding/' ?>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIGILAND - Wedding Invitation</title>
-    <link rel="icon" href="./assets/Digiland.svg">
+    <link rel="icon" href="assets/Digiland.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -29,7 +30,7 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="./assets/styles.css">
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="font-sans overflow-x-hidden bg-cream">
     <!-- Puzzle Section -->
@@ -37,8 +38,8 @@
         <div class="w-full max-w-md mx-auto h-screen relative">
             <!-- Video Background -->
             <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-1" style="filter: grayscale(100%)">
-                <source src="./assets/video.m4v" type="video/mp4">
-                <img src="./assets/cover1.webp" alt="Background" class="w-full h-full object-cover" style="filter: grayscale(100%)">
+                <source src="assets/video.m4v" type="video/mp4">
+                <img src="assets/cover1.webp" alt="Background" class="w-full h-full object-cover" style="filter: grayscale(100%)">
             </video>
             
             <!-- Overlay -->
@@ -47,7 +48,7 @@
             <div class="relative z-20 h-full px-6 py-8 text-center">
                 <!-- Logo fixed di atas -->
                 <div class="absolute top-20 left-1/2 transform -translate-x-1/2">
-                    <img src="./assets/digiland-logo3.png" alt="DIGILAND" class="digiland-logo w-86 mx-auto" />
+                    <img src="assets/digiland-logo3.png" alt="DIGILAND" class="digiland-logo w-86 mx-auto" />
                 </div>
                 
                 <!-- Content container di tengah -->
@@ -127,7 +128,7 @@
                 </div>
                 
                 <div class="mb-8 fade-in">
-                    <img src="./assets/bismillah.png" alt="Bismillah" class="mx-auto max-w-32 opacity-80" />
+                    <img src="assets/Bismillah.png" alt="Bismillah" class="mx-auto max-w-32 opacity-80" />
                 </div>
                 
                 <div class="fade-in">
@@ -145,7 +146,7 @@
                     <div class="couple-frame" data-couple="diyang">
                         <div class="couple-image-container relative mx-auto w-full h-screen">
                             <div class="couple-photo w-full h-full overflow-hidden relative">
-                                <div class="couple-image w-full h-full" style="background-image: url('./assets/CroppedDyg.webp')"></div>
+                                <div class="couple-image w-full h-full" style="background-image: url('assets/CroppedDyg.webp')"></div>
                                 
                                 <div class="absolute bg-gradient-to-t from-black/30 from-5% to-transparent to-20% inset-0 flex flex-col justify-end items-center text-center p-6 z-20">
                                     <div class="p-4 text-white ">
@@ -179,7 +180,7 @@
                     <div class="couple-frame" data-couple="gibran">
                         <div class="couple-image-container relative mx-auto w-full h-screen">
                             <div class="couple-photo w-full h-full overflow-hidden relative">
-                                <div class="couple-image w-full h-full" style="background-image: url('./assets/CroppedGib.webp')"></div>
+                                <div class="couple-image w-full h-full" style="background-image: url('assets/CroppedGib.webp')"></div>
                                 
                                 <div class="absolute bg-gradient-to-t from-black/40 from-5% to-transparent to-20% inset-0 flex flex-col justify-end items-center text-center p-6 z-20">
                                     <div class="p-4 text-white">
@@ -417,7 +418,7 @@
         <section class="relative h-screen bg-cream flex items-center justify-center">
             <div class="w-full max-w-md mx-auto h-screen relative">
                 <div class="absolute inset-0 w-full h-full">
-                    <img src="./assets/farewell.webp" alt="See You There" class="w-full h-full object-cover" />
+                    <img src="assets/farewell.webp" alt="See You There" class="w-full h-full object-cover" />
                 </div>
                 
                 <div class="absolute inset-0 bg-black/40"></div>
@@ -466,11 +467,11 @@
             
             <!-- Audio Element -->
             <audio id="backgroundMusic" loop preload="auto">
-                <source src="./assets/salpriadi.mp3" type="audio/mpeg">
+                <source src="assets/salpriadi.mp3" type="audio/mpeg">
             </audio>
         </div>
     </div>
 
-    <script src="./assets/script.js"></script>
+    <script src="assets/script.js"></script>
 </body>
 </html>

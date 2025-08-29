@@ -397,4 +397,28 @@ class Gift_model extends CI_Model {
         
         return $stats;
     }
+
+    /**
+ * Search users by name, email, or username
+ * @param string $search Search term
+ * @return array Array of matching users
+ */
+public function search_users($search) {
+    if (empty($search)) {
+        return [];
+    }
+    
+    $this->db->select('id, username, email, first_name, last_name, created_at, is_active');
+    $this->db->group_start();
+    $this->db->like('username', $search);
+    $this->db->or_like('email', $search);
+    $this->db->or_like('first_name', $search);
+    $this->db->or_like('last_name', $search);
+    $this->db->or_like('CONCAT(first_name, " ", last_name)', $search);
+    $this->db->group_end();
+    $this->db->order_by('created_at', 'DESC');
+    
+    $query = $this->db->get('users');
+    return $query->result_array();
+}
 } 
