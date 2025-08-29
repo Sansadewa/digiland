@@ -1530,20 +1530,20 @@ window.addEventListener('beforeunload', () => {
     });
 });
 
-// ===== SERVICE WORKER REGISTRATION (Optional) =====
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-                console.log('SW registered: ', registration);
-                trackEvent('service_worker_registered');
-            })
-            .catch((registrationError) => {
-                console.log('SW registration failed: ', registrationError);
-                trackEvent('service_worker_failed', { error: registrationError.toString() });
-            });
-    });
-}
+// // ===== SERVICE WORKER REGISTRATION (Optional) =====
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', () => {
+//         navigator.serviceWorker.register('/sw.js')
+//             .then((registration) => {
+//                 console.log('SW registered: ', registration);
+//                 trackEvent('service_worker_registered');
+//             })
+//             .catch((registrationError) => {
+//                 console.log('SW registration failed: ', registrationError);
+//                 trackEvent('service_worker_failed', { error: registrationError.toString() });
+//             });
+//     });
+// }
 
 // ===== EXPORT FUNCTIONS FOR GLOBAL ACCESS =====
 window.weddingInvitation = {
