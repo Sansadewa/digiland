@@ -9,8 +9,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.tailwindcss.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"/>
     <link rel="icon" href="<?php echo base_url('assets/Digiland.svg'); ?>" sizes="any" type="image/svg+xml" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- DataTables JS -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.tailwindcss.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <style>
         body {
             font-family: 'Lato', sans-serif;
@@ -18,6 +25,23 @@
         }
         h1, h2, h3, .font-serif {
             font-family: 'Playfair Display', serif;
+        }
+        /* DataTables custom styling */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            @apply px-3 py-1 rounded-md mx-1 text-sm border border-gray-300 bg-white text-gray-700 hover:bg-gray-50;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            @apply bg-emerald-600 text-white border-emerald-600;
+        }
+        .dataTables_wrapper .dataTables_length select {
+            @apply border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 text-sm h-9;
+        }
+        .dataTables_wrapper .dataTables_filter input {
+            @apply border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500 text-sm h-9 w-full md:w-64;
+        }
+        .dataTables_wrapper .dataTables_info {
+            @apply text-sm text-gray-700;
         }
     </style>
 </head>

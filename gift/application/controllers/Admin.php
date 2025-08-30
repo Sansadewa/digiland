@@ -71,9 +71,83 @@ class Admin extends CI_Controller {
      * Users Management
      */
     public function users() {
-        $data['users'] = $this->gift_model->get_all_users();
         $this->load->view('admin/header');
-        $this->load->view('admin/users', $data);
+        $this->load->view('admin/users');
+    }
+
+    /**
+     * Get users data for DataTables with server-side processing
+     */
+    public function get_users_ajax() {
+        // Check if it's an AJAX request
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        // Get DataTables parameters
+        $draw = intval($this->input->get('draw'));
+        $start = intval($this->input->get('start'));
+        $length = intval($this->input->get('length'));
+        $search = $this->input->get('search')['value'] ?? '';
+        $order_column = $this->input->get('order')[0]['column'] ?? 0;
+        $order_dir = $this->input->get('order')[0]['dir'] ?? 'asc';
+
+        // Map column index to database column name
+        $columns = [
+            0 => 'name',
+            1 => 'phone',
+            2 => 'username',
+            3 => 'show_gift_section',
+            4 => 'created_at'
+        ];
+        $order_by = $columns[$order_column] ?? 'created_at';
+
+        // Get users data with pagination and search
+        $users = $this->gift_model->get_users_datatable($start, $length, $search, $order_by, $order_dir);
+        $total_records = $this->gift_model->count_all_users();
+        $total_filtered = !empty($search) ? $this->gift_model->count_filtered_users($search) : $total_records;
+
+        // Prepare data for DataTables
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = [
+                'name' => '<div class="flex items-center">
+                    
+                    <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">' . htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') . '</div>
+                        <div class="text-sm text-gray-500">@' . htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') . '</div>
+                    </div>
+                </div>',
+                'phone' => $user['phone'] ?: 'N/A',
+                'username' => '<a href="' . base_url($user['username']) . '" target="_blank" class="text-emerald-600 hover:text-emerald-900">' . 
+                             htmlspecialchars(base_url($user['username']), ENT_QUOTES, 'UTF-8') . '</a>',
+                'show_gift_section' => $user['show_gift_section'] ? 'Yes' : 'No',
+                'created_at' => date('M j, Y g:i A', strtotime($user['created_at'])),
+                'actions' => '<button data-name="' . htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') . '" ' .
+                           'data-username="' . htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') . '" ' .
+                           'class="copy-invite-btn text-emerald-600 hover:text-emerald-900 mr-3" title="Copy Invitation">' .
+                           '<i class="fas fa-envelope"></i> Invite</button>' .
+                           '<a href="' . base_url('admin/users/edit/' . $user['id']) . '" class="text-emerald-600 hover:text-emerald-900 mr-3">' .
+                           '<i class="fas fa-edit"></i> Edit</a>' .
+                           '<a href="' . base_url('admin/users/delete/' . $user['id']) . '" ' .
+                           'onclick="return confirm(\'Are you sure you want to delete this user? This action cannot be undone.\')" ' .
+                           'class="text-red-600 hover:text-red-900">' .
+                           '<i class="fas fa-trash"></i> Delete</a>'
+            ];
+        }
+
+        // Prepare JSON response
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $total_records,
+            'recordsFiltered' => $total_filtered,
+            'data' => $data
+        ];
+
+        // Send JSON response
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
     /**

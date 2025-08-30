@@ -122,19 +122,19 @@ Kami yang berbahagia
     
 
     <!-- Users Table -->
-    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+    <div class="bg-white shadow overflow-hidden sm:rounded-md px-3">
         <div class="px-4 py-5 sm:px-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900">
-                All Users (<?php echo count($users); ?>)
+                All Users 
             </h3>
         </div>
         <!-- Search Input -->
-    <div class="mb-1 px-2 py-3 sm:px-6">
+    <!-- <div class="mb-1 px-2 py-3 sm:px-6">
         <div class="input-group">
             <span class="input-group-text"><i class="fas fa-search"></i></span>
             <input type="text" id="searchUsers" class="form-control" placeholder="Search users...">
         </div>
-    </div>
+    </div> -->
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200" id="usersTable">
                 <thead class="bg-gray-50">
@@ -148,52 +148,7 @@ Kami yang berbahagia
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <?php foreach ($users as $user): ?>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    <div class="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center">
-                                        <span class="text-emerald-800 font-medium"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></span>
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900"><?php echo $user['name']; ?></div>
-                                    <div class="text-sm text-gray-500">@<?php echo $user['username']; ?></div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <?php echo $user['phone'] ?: 'N/A'; ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <a href="<?php echo base_url($user['username']); ?>" target="_blank" class="text-emerald-600 hover:text-emerald-900">
-                                <?php echo base_url($user['username']); ?>
-                            </a>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <?php echo $user['show_gift_section'] ? 'Yes' : 'No'; ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <?php echo date('M j, Y g:i A', strtotime($user['created_at'])); ?>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button onclick="copyInvite(event, '<?php echo addslashes($user['name']); ?>', '<?php echo $user['username']; ?>')" 
-                                class="text-emerald-600 hover:text-emerald-900 mr-3"
-                                title="Copy Invitation">
-                                <i class="fas fa-envelope"></i> Invite
-                            </button>
-                            <a href="<?php echo base_url('admin/users/edit/' . $user['id']); ?>" class="text-emerald-600 hover:text-emerald-900 mr-3">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a href="<?php echo base_url('admin/users/delete/' . $user['id']); ?>" 
-                               onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
-                               class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <!-- Data will be loaded via AJAX -->
                 </tbody>
             </table>
         </div>
@@ -205,59 +160,140 @@ Kami yang berbahagia
 
 <script>
 $(document).ready(function() {
-    // Search functionality
-    $('#searchUsers').on('keyup', function() {
-        const searchText = $(this).val().toLowerCase();
-        
-        $('#usersTable tbody tr').each(function() {
-            const rowText = $(this).text().toLowerCase();
-            $(this).toggle(rowText.indexOf(searchText) > -1);
-        });
+    // Initialize DataTable
+    var table = $('#usersTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '<?php echo base_url('admin/get_users_ajax'); ?>',
+            type: 'GET',
+            dataType: 'json',
+            error: function(xhr, error, thrown) {
+                console.error('DataTables error:', error, thrown);
+                $('#usersTable').before(
+                    '<div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">' +
+                    'Error loading data. Please try again.' +
+                    '</div>'
+                );
+            }
+        },
+        columns: [
+            { 
+                data: 'name',
+                name: 'name',
+                orderable: true,
+                className: 'py-4'
+            },
+            { 
+                data: 'phone',
+                name: 'phone',
+                orderable: true,
+                className: 'py-4'
+            },
+            { 
+                data: 'username',
+                name: 'username',
+                orderable: true,
+                className: 'py-4'
+            },
+            { 
+                data: 'show_gift_section',
+                name: 'show_gift_section',
+                orderable: true,
+                className: 'py-4'
+            },
+            { 
+                data: 'created_at',
+                name: 'created_at',
+                orderable: true,
+                className: 'py-4'
+            },
+            { 
+                data: 'actions',
+                name: 'actions',
+                orderable: false,
+                className: 'py-4 text-center',
+                render: function(data, type, row, meta) {
+                    return data;
+                }
+            }
+        ],
+        order: [[4, 'desc']],
+        responsive: true,
+        autoWidth: false,
+        pageLength: 25,
+        language: {
+            processing: '<div class="flex items-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-700 mr-3"></div>Loading...</div>',
+            search: "_INPUT_",
+            searchPlaceholder: "Search users...",
+            lengthMenu: "Show _MENU_ users per page",
+            zeroRecords: "No users found",
+            info: "Showing _START_ to _END_ of _TOTAL_ users",
+            infoEmpty: "No users available",
+            infoFiltered: "(filtered from _MAX_ total users)",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "<i class='fas fa-chevron-right'></i>",
+                previous: "<i class='fas fa-chevron-left'></i>"
+            }
+        },
+        dom: "<'flex flex-col md:flex-row justify-between mb-4'<'mb-4 md:mb-0'l><'flex items-center'f>>" +
+             "<'w-full overflow-x-auto'tr>" +
+             "<'flex flex-col md:flex-row justify-between items-center mt-4 space-y-4 md:space-y-0'<'text-sm text-gray-500'i><'pagination flex space-x-2'p>>",
+        initComplete: function() {
+            $('.dataTables_filter input').addClass('block w-full md:w-64 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500');
+            $('.dataTables_length select').addClass('block w-20 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500');
+        }
     });
+
+    // Handle copy invite button click
+    $(document).on('click', '.copy-invite-btn', function() {
+        const name = $(this).data('name');
+        const username = $(this).data('username');
+        copyInvite({ preventDefault: () => {} }, name, username);
+    });
+
+    // Handle refresh button click
+    $('#refreshTable').on('click', function() {
+        table.ajax.reload(null, false);
+        showToast('Table refreshed', 'success');
+    });
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-md text-white ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} shadow-lg`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
 });
 
+// Copy invite function (existing function)
 function copyInvite(event, name, username) {
-    // Prevent default button behavior and get button reference
     event.preventDefault();
-    const button = event.currentTarget;
-    const originalContent = button.innerHTML;
-    
-    // Get the template and replace placeholders
-    let template = document.getElementById('inviteTemplate').value;
-    // Remove leading spaces from each line of the template
-    // template = template.replace(/^\s+/gm, '');
-    
-    let message = template
+    const template = document.getElementById('inviteTemplate').value;
+    const inviteText = template
         .replace(/\$name/g, name)
         .replace(/\$username/g, username);
     
-    // Show loading state
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Copying...';
-    button.disabled = true;
-    
-    // Copy to clipboard
-    navigator.clipboard.writeText(message).then(function() {
+    navigator.clipboard.writeText(inviteText).then(function() {
         // Show success message
-        console.log("Sukses Copy");
-        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        button.classList.add('text-green-600');
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-4 right-4 px-6 py-3 bg-emerald-600 text-white rounded-md shadow-lg';
+        toast.textContent = 'Invitation copied to clipboard!';
+        document.body.appendChild(toast);
         
-        // Revert button after 2 seconds
         setTimeout(() => {
-            button.innerHTML = originalContent;
-            button.classList.remove('text-green-600');
-            button.disabled = false;
-        }, 2000);
-        
+            toast.remove();
+        }, 3000);
     }).catch(function(err) {
         console.error('Could not copy text: ', err);
-        button.innerHTML = '<i class="fas fa-times"></i> Failed';
-        button.classList.add('text-red-600');
-        setTimeout(() => {
-            button.innerHTML = originalContent;
-            button.classList.remove('text-red-600');
-            button.disabled = false;
-        }, 2000);
+        alert('Failed to copy invitation. Please try again.');
     });
 }
 
@@ -311,7 +347,9 @@ $('#userForm').on('submit', function(e) {
                 
                 // Reload the users table
                 setTimeout(() => {
-                    window.location.reload();
+                    // window.location.reload();
+                    $('#usersTable').DataTable().ajax.reload();
+
                 }, 1000);
             } else {
                 // Show error message
@@ -348,7 +386,7 @@ $('#addAndCopyBtn').on('click', function() {
     
     // Submit form via AJAX
     $.ajax({
-        url: '<?php echo base_url("admin/users/add_user"); ?>',
+        url: '<?php echo base_url("admin/users/add"); ?>',
         type: 'POST',
         data: form.serialize(),
         dataType: 'json',
@@ -374,7 +412,8 @@ $('#addAndCopyBtn').on('click', function() {
                     // Reset form and reload after a delay
                     setTimeout(() => {
                         form[0].reset();
-                        window.location.reload();
+                        // window.location.reload();
+                        $('#usersTable').DataTable().ajax.reload();
                     }, 1000);
                 }).catch(function(err) {
                     console.error('Copy failed:', err);

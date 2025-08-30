@@ -538,7 +538,7 @@ function openInvitation() {
 // ===== GALLERY FUNCTIONS =====
 function initGallery() {
     // Build gallery data from gal1.webp ... gal14.webp with auto heights by aspect ratio
-    const totalImages = 19;
+    const totalImages = 20;
     const numColumns = 5;
 
     function loadImage(src) {

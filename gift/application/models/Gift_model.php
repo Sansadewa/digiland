@@ -421,4 +421,66 @@ public function search_users($search) {
     $query = $this->db->get('users');
     return $query->result_array();
 }
+
+    /**
+     * Get users for DataTables with server-side processing
+     * 
+     * @param int $start Starting row (for pagination)
+     * @param int $length Number of records to return
+     * @param string $search Search term
+     * @param string $order_by Column to order by
+     * @param string $order_dir Order direction (ASC/DESC)
+     * @return array Users data
+     */
+    public function get_users_datatable($start, $length, $search = '', $order_by = 'created_at', $order_dir = 'DESC') {
+        $this->db->select('*');
+        $this->db->from('users');
+        
+        // Apply search
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('name', $search);
+            $this->db->or_like('username', $search);
+            $this->db->or_like('phone', $search);
+            $this->db->group_end();
+        }
+        
+        // Apply ordering
+        $this->db->order_by($order_by, $order_dir);
+        
+        // Apply pagination
+        $this->db->limit($length, $start);
+        
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    /**
+     * Count all users
+     * 
+     * @return int Total number of users
+     */
+    public function count_all_users() {
+        return $this->db->count_all('users');
+    }
+    
+    /**
+     * Count filtered users based on search term
+     * 
+     * @param string $search Search term
+     * @return int Number of filtered users
+     */
+    public function count_filtered_users($search = '') {
+        $this->db->from('users');
+        
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('name', $search);
+            $this->db->or_like('username', $search);
+            $this->db->or_like('phone', $search);
+            $this->db->group_end();
+        }
+        
+        return $this->db->count_all_results();
+    }
 } 

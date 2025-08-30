@@ -455,7 +455,7 @@
                     <h2 class="font-display text-4xl font-light mb-2 leading-tight">Sampai Ketemu</h2>
                     <h2 class="font-display text-4xl font-light mb-6 leading-tight">Nanti</h2>
                     <p class="text-sm font-light tracking-wide opacity-90">
-                        Terima kasih atas doa dan dukungannya ya:)
+                        Terima kasih atas doa dan restunya ya:)
                     </p>
                 </div>
             </div>
